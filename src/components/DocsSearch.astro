@@ -1,5 +1,5 @@
 ---
-import { Search } from '@lucide/astro';
+import { Search, CornerDownLeft, ArrowUp, ArrowDown } from '@lucide/astro';
 
 /**
  * Docs search, over the Pagefind index built after `astro build`.
@@ -9,84 +9,170 @@ import { Search } from '@lucide/astro';
  * a search field that silently does nothing out of the dev server. To try it
  * locally, `npm run build` and then `npm run preview:pages`.
  *
- * Results are rendered as plain links under the input rather than a floating
- * panel: the sidebar is 212px wide, and an overlay that narrow reads worse than
- * a list that just pushes the nav down. It also means the same markup works
- * inside the phone disclosure, where there is nowhere to float to.
+ * The sidebar is 212px wide, which is too narrow to read a result in, so the
+ * sidebar only holds a trigger shaped like a search box. It opens a native
+ * `<dialog>` wide enough for a title, the section it matched in and a two-line
+ * excerpt. The dialog brings its own focus trap, Escape and top layer; on a
+ * phone it fills the screen.
  */
 const enabled = !import.meta.env.DEV;
 ---
 
 {
 	enabled && (
-		<div data-docs-search role="search" class="mb-6">
-			<label for="docs-search" class="sr-only">
-				Search the documentation
-			</label>
-			<div class="relative">
-				<Search
-					class="pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-stone-500"
-					aria-hidden="true"
-				/>
-				<input
-					id="docs-search"
-					type="search"
-					placeholder="Search docs"
-					autocomplete="off"
-					spellcheck="false"
-					aria-keyshortcuts="/"
-					class="w-full rounded-xl border border-stone-200/80 bg-white py-2 pr-8 pl-9 text-[13px] font-medium text-stone-900 shadow-pill transition-colors placeholder:text-stone-500 focus:border-stone-300"
-				/>
+		<div data-docs-search class="mb-6">
+			<button
+				type="button"
+				data-docs-search-open
+				aria-haspopup="dialog"
+				aria-keyshortcuts="/ Control+K Meta+K"
+				class="flex w-full items-center gap-2.5 rounded-xl border border-stone-200/80 bg-white py-2 pr-2.5 pl-3 text-left text-[13px] font-medium text-stone-500 shadow-pill transition-colors hover:border-stone-300 hover:text-stone-700"
+			>
+				<Search class="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+				<span class="flex-1">Search docs</span>
 				<kbd
 					aria-hidden="true"
-					class="pointer-events-none absolute top-1/2 right-2.5 hidden -translate-y-1/2 rounded-md border border-stone-200 px-1.5 font-mono text-[11px] leading-5 text-stone-500 lg:block"
+					class="hidden rounded-md border border-stone-200 px-1.5 font-mono text-[11px] leading-5 text-stone-500 lg:block"
 				>
 					/
 				</kbd>
-			</div>
-			<p data-docs-search-status class="sr-only" role="status" />
-			<p data-docs-search-empty hidden class="mt-2 px-1 text-[12.5px] font-medium text-stone-500" />
-			<ul
-				data-docs-search-results
-				hidden
-				class="mt-2 space-y-1 rounded-2xl border border-stone-200/80 bg-white p-2 shadow-card"
-			/>
+			</button>
+
+			<dialog
+				data-docs-search-dialog
+				aria-label="Search the documentation"
+				class="m-0 h-dvh max-h-none w-full max-w-none bg-white p-0 text-stone-900 sm:mx-auto sm:mt-[10vh] sm:h-fit sm:w-[min(640px,calc(100vw-2rem))] sm:rounded-2xl sm:border sm:border-stone-200/80 sm:shadow-card-lift"
+			>
+				<div class="flex h-full flex-col sm:max-h-[min(640px,80vh)]">
+					<div role="search" class="flex items-center gap-3 border-b border-stone-100 px-4 sm:px-5">
+						<label for="docs-search" class="sr-only">
+							Search the documentation
+						</label>
+						<Search class="h-4 w-4 shrink-0 text-stone-500" aria-hidden="true" />
+						<input
+							id="docs-search"
+							type="search"
+							placeholder="Search docs"
+							autocomplete="off"
+							spellcheck="false"
+							enterkeyhint="go"
+							aria-describedby="docs-search-hint"
+							class="min-w-0 flex-1 bg-transparent py-4 text-[15px] font-medium text-stone-900 outline-none placeholder:text-stone-500 [&::-webkit-search-cancel-button]:hidden"
+						/>
+						<button
+							type="button"
+							data-docs-search-close
+							class="shrink-0 rounded-md border border-stone-200 px-1.5 font-mono text-[11px] leading-5 text-stone-500 transition-colors hover:border-stone-300 hover:text-stone-900"
+						>
+							<span aria-hidden="true">esc</span>
+							<span class="sr-only">Close search</span>
+						</button>
+					</div>
+
+					<div class="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+						<p data-docs-search-status class="sr-only" role="status" />
+						<p
+							data-docs-search-empty
+							class="px-5 py-10 text-center text-[13px] font-medium text-stone-500"
+						>
+							Type to search the documentation.
+						</p>
+						<ul data-docs-search-results hidden class="space-y-1 p-2" />
+					</div>
+
+					<div
+						id="docs-search-hint"
+						class="hidden items-center gap-4 border-t border-stone-100 px-5 py-2.5 text-[11.5px] font-medium text-stone-500 sm:flex"
+					>
+						<span class="flex items-center gap-1.5">
+							<kbd class="rounded border border-stone-200 p-0.5"><ArrowUp class="h-3 w-3" aria-hidden="true" /></kbd>
+							<kbd class="rounded border border-stone-200 p-0.5"><ArrowDown class="h-3 w-3" aria-hidden="true" /></kbd>
+							to move
+						</span>
+						<span class="flex items-center gap-1.5">
+							<kbd class="rounded border border-stone-200 p-0.5"><CornerDownLeft class="h-3 w-3" aria-hidden="true" /></kbd>
+							to open
+						</span>
+						<span class="flex items-center gap-1.5">
+							<kbd class="rounded border border-stone-200 px-1 font-mono text-[10.5px] leading-4">esc</kbd>
+							to close
+						</span>
+					</div>
+				</div>
+			</dialog>
+
 			<script is:inline>
 				// Pagefind writes its index into dist/ *after* `astro build`, so
 				// `/pagefind/pagefind.js` does not exist while Vite is bundling this
 				// page. A bundled dynamic import would be rewritten into Vite's
 				// preload helper around a path it cannot resolve, so this one import
 				// is deliberately kept out of the bundler and handed back as a
-				// function. It is called on the first keystroke, never on load.
+				// function. It is called when the dialog opens, never on load.
 				window.__cogsendPagefind = () => import('/pagefind/pagefind.js');
 			</script>
 		</div>
 	)
 }
 
+<style>
+	[data-docs-search-dialog]::backdrop {
+		background: rgb(12 12 14 / 0.45);
+	}
+	/* Set on the root so the page behind the dialog cannot scroll away. */
+	:global(html.search-open) {
+		overflow: hidden;
+	}
+	/* The excerpts are set with innerHTML, so their marks are outside this
+	   component's scope. */
+	[data-docs-search-results] :global(mark) {
+		padding: 0 0.1rem;
+		border-radius: 0.2rem;
+		background: var(--color-sel);
+		color: #0c0c0e;
+	}
+</style>
+
 <script>
-	type Result = {
-		data: () => Promise<{ url: string; excerpt: string; meta: { title?: string } }>;
+	type Sub = { title: string; url: string; excerpt: string; anchor?: { element: string } };
+	type Data = {
+		url: string;
+		excerpt: string;
+		meta: { title?: string; group?: string };
+		sub_results?: Sub[];
 	};
-	type Pagefind = { search: (query: string) => Promise<{ results: Result[] }> };
+	type Result = { data: () => Promise<Data> };
+	type Pagefind = {
+		options: (options: { excerptLength?: number }) => Promise<void>;
+		search: (query: string) => Promise<{ results: Result[] }>;
+	};
 
 	const root = document.querySelector<HTMLElement>('[data-docs-search]');
 
 	if (root) {
-		const input = root.querySelector('input');
+		const trigger = root.querySelector<HTMLButtonElement>('[data-docs-search-open]');
+		const dialog = root.querySelector<HTMLDialogElement>('[data-docs-search-dialog]');
+		const input = root.querySelector<HTMLInputElement>('#docs-search');
 		const list = root.querySelector<HTMLUListElement>('[data-docs-search-results]');
 		const status = root.querySelector<HTMLElement>('[data-docs-search-status]');
 		const empty = root.querySelector<HTMLElement>('[data-docs-search-empty]');
 
-		// Loaded on the first keystroke, never on page load: most readers never
-		// search, and the index is a download of its own. The loader itself comes
-		// from the inline script above, which is the only way to reach a file that
-		// the build step did not create yet.
+		// Loaded when the dialog first opens, never on page load: most readers
+		// never search, and the index is a download of its own. The loader itself
+		// comes from the inline script above, which is the only way to reach a
+		// file that the build step did not create yet.
 		const loader = (window as unknown as { __cogsendPagefind?: () => Promise<Pagefind> })
 			.__cogsendPagefind;
 		let loading: Promise<Pagefind> | null = null;
 		const pagefind = () => {
-			loading ??= loader ? loader() : Promise.reject(new Error('No Pagefind loader'));
+			loading ??= (loader ? loader() : Promise.reject(new Error('No Pagefind loader'))).then(
+				async (pf) => {
+					// Short enough to read as a snippet in two lines.
+					await pf.options({ excerptLength: 18 });
+					return pf;
+				}
+			);
+			// A failed load is not cached, so the next keystroke tries again.
+			loading.catch(() => (loading = null));
 			return loading;
 		};
 
@@ -101,58 +187,128 @@ const enabled = !import.meta.env.DEV;
 				.replace(/&lt;mark&gt;/g, '<mark>')
 				.replace(/&lt;\/mark&gt;/g, '</mark>');
 
-		const clear = () => {
+		const message = (text: string) => {
 			list?.replaceChildren();
 			if (list) list.hidden = true;
+			if (empty) {
+				empty.textContent = text;
+				empty.hidden = false;
+			}
+		};
+
+		const reset = () => {
+			message('Type to search the documentation.');
 			if (status) status.textContent = '';
-			if (empty) empty.hidden = true;
 		};
 
 		/** The result links, in order, for the arrow keys. */
 		const links = () => [...(list?.querySelectorAll<HTMLAnchorElement>('a') ?? [])];
 
-		const show = (query: string, items: { url: string; excerpt: string; meta: { title?: string } }[]) => {
+		const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className: string) => {
+			const node = document.createElement(tag);
+			node.className = className;
+			return node;
+		};
+
+		const LINK =
+			'block rounded-xl px-3 py-2.5 outline-none transition-colors hover:bg-stone-50 focus-visible:bg-stone-100';
+		const EXCERPT = 'mt-0.5 line-clamp-2 text-[12.5px] leading-relaxed font-medium text-stone-500';
+
+		const show = (query: string, items: Data[]) => {
 			if (!list || !status) return;
-			list.replaceChildren();
 
 			if (items.length === 0) {
-				clear();
 				status.textContent = 'No results';
-				// Written out as well as announced: an empty space under the box
-				// reads as a search that is still loading.
-				if (empty) {
-					empty.textContent = `Nothing matches “${query}”.`;
-					empty.hidden = false;
-				}
+				message(`Nothing matches “${query}”.`);
 				return;
 			}
 
+			list.replaceChildren();
 			if (empty) empty.hidden = true;
 			status.textContent = `${items.length} result${items.length === 1 ? '' : 's'}`;
+
 			for (const item of items) {
-				const link = document.createElement('a');
+				const entry = el('li', '');
+				const link = el('a', LINK);
 				link.href = item.url;
-				link.className =
-					'block rounded-xl px-2.5 py-2 transition-colors hover:bg-stone-50 focus-visible:bg-stone-50';
 
-				const title = document.createElement('span');
-				title.className = 'block text-[13px] font-bold text-stone-900';
+				const head = el('span', 'flex items-baseline justify-between gap-3');
+				const title = el('span', 'text-[14px] font-bold text-stone-900');
 				title.textContent = item.meta.title ?? item.url;
+				head.append(title);
+				if (item.meta.group) {
+					const group = el(
+						'span',
+						'shrink-0 text-[10.5px] font-bold tracking-widest text-stone-500 uppercase'
+					);
+					group.textContent = item.meta.group;
+					head.append(group);
+				}
 
-				const body = document.createElement('span');
 				// No `block` here: line-clamp sets its own display, and a display
 				// utility alongside it wins the cascade and silently unclamps.
-				body.className =
-					'mt-0.5 line-clamp-3 text-[12px] leading-relaxed font-medium text-stone-500';
+				const body = el('span', EXCERPT);
 				body.innerHTML = excerpt(item.excerpt);
-
-				link.append(title, body);
-				const entry = document.createElement('li');
+				link.append(head, body);
 				entry.append(link);
+
+				// The sections the match was found in, each linking to its heading.
+				// The page's own top section has no anchor and is the row above.
+				const subs = (item.sub_results ?? []).filter((sub) => sub.anchor).slice(0, 3);
+				if (subs.length) {
+					const nested = el('ul', 'mt-0.5 ml-3 space-y-0.5 border-l border-stone-200 pl-2');
+					for (const sub of subs) {
+						const subLink = el('a', LINK.replace('py-2.5', 'py-2'));
+						subLink.href = sub.url;
+						const subTitle = el('span', 'block text-[13px] font-bold text-stone-700');
+						subTitle.textContent = sub.title;
+						const subBody = el('span', EXCERPT);
+						subBody.innerHTML = excerpt(sub.excerpt);
+						subLink.append(subTitle, subBody);
+						const li = el('li', '');
+						li.append(subLink);
+						nested.append(li);
+					}
+					entry.append(nested);
+				}
+
 				list.append(entry);
 			}
 			list.hidden = false;
+			list.parentElement?.scrollTo({ top: 0 });
 		};
+
+		const open = () => {
+			if (!dialog || dialog.open) return;
+			dialog.showModal();
+			document.documentElement.classList.add('search-open');
+			input?.focus();
+			input?.select();
+			// Start fetching the index while the query is still being typed.
+			pagefind().catch(() => {});
+		};
+
+		const close = () => dialog?.close();
+
+		trigger?.addEventListener('click', open);
+		root.querySelector('[data-docs-search-close]')?.addEventListener('click', close);
+
+		// Escape, the close button, a result and the backdrop all end up here.
+		dialog?.addEventListener('close', () => {
+			document.documentElement.classList.remove('search-open');
+		});
+
+		// A click on the backdrop lands on the dialog element itself, since its
+		// content fills the box.
+		dialog?.addEventListener('click', (event) => {
+			if (event.target === dialog) close();
+		});
+
+		// A result on the page being read only moves to a heading, which does not
+		// unload the page, so the dialog has to close itself.
+		list?.addEventListener('click', (event) => {
+			if ((event.target as HTMLElement).closest('a')) close();
+		});
 
 		let timer: ReturnType<typeof setTimeout> | undefined;
 
@@ -160,70 +316,73 @@ const enabled = !import.meta.env.DEV;
 			const query = input.value.trim();
 			clearTimeout(timer);
 			if (query.length < 2) {
-				clear();
+				reset();
 				return;
 			}
 			timer = setTimeout(async () => {
 				try {
 					const found = await (await pagefind()).search(query);
-					const items = await Promise.all(found.results.slice(0, 6).map((r) => r.data()));
+					const items = await Promise.all(found.results.slice(0, 8).map((r) => r.data()));
 					// A slower search must not overwrite a newer one.
 					if (input.value.trim() !== query) return;
 					show(query, items);
 				} catch {
 					if (status) status.textContent = 'Search is unavailable.';
-					if (empty) {
-						empty.textContent = 'Search is unavailable right now.';
-						empty.hidden = false;
-					}
+					message('Search is unavailable right now.');
 				}
-			}, 150);
+			}, 120);
 		});
 
-		// Escape closes the results first and only then empties the box, so one
-		// press never throws away a query somebody wants to refine. Down moves
-		// into the results.
+		// Enter opens the top result; Down moves into the results. Escape closes
+		// the dialog and keeps the query for next time — handled here because a
+		// search input's own Escape would clear the box and leave the dialog open.
 		input?.addEventListener('keydown', (event) => {
-			if (event.key === 'ArrowDown') {
+			if (event.isComposing) return;
+			if (event.key === 'Escape') {
+				event.preventDefault();
+				close();
+			} else if (event.key === 'Enter') {
+				const first = links()[0];
+				if (first) {
+					event.preventDefault();
+					first.click();
+				}
+			} else if (event.key === 'ArrowDown') {
 				const first = links()[0];
 				if (first) {
 					event.preventDefault();
 					first.focus();
 				}
-				return;
-			}
-			if (event.key !== 'Escape') return;
-			if (list && !list.hidden) {
-				event.preventDefault();
-				clear();
 			}
 		});
 
-		// Up and down walk the results; up from the first goes back to the box,
-		// and Escape from anywhere in the list returns there too.
+		// Up and down walk the results; up from the first goes back to the box.
 		list?.addEventListener('keydown', (event) => {
+			if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
 			const all = links();
 			const index = all.indexOf(document.activeElement as HTMLAnchorElement);
 			if (index === -1) return;
-			if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-				event.preventDefault();
-				const next = index + (event.key === 'ArrowDown' ? 1 : -1);
-				if (next < 0) input?.focus();
-				else all[Math.min(next, all.length - 1)]?.focus();
-			} else if (event.key === 'Escape') {
-				clear();
-				input?.focus();
-			}
+			event.preventDefault();
+			const next = index + (event.key === 'ArrowDown' ? 1 : -1);
+			if (next < 0) input?.focus();
+			else all[Math.min(next, all.length - 1)]?.focus();
 		});
 
-		// `/` focuses search from anywhere on a docs page, unless something that
-		// takes text already has focus.
+		// `/` opens search from anywhere on a docs page, unless something that
+		// takes text already has focus; Cmd/Ctrl+K does too, from anywhere.
 		document.addEventListener('keydown', (event) => {
+			const shortcut = (event.metaKey || event.ctrlKey) && !event.altKey && event.key.toLowerCase() === 'k';
+			if (shortcut) {
+				event.preventDefault();
+				if (dialog?.open) close();
+				else open();
+				return;
+			}
 			if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) return;
 			const target = event.target as HTMLElement | null;
 			if (target?.closest('input, textarea, select, [contenteditable]')) return;
 			event.preventDefault();
-			input?.focus();
+			open();
 		});
 	}
 </script>

@@ -102,7 +102,12 @@ const FOOT_LINK =
 				<!-- `data-pagefind-body` is what gets indexed. Without it the sidebar,
 				     the header and the footer would land in every result. -->
 				<article data-pagefind-body>
-					<p class="text-[11px] font-bold tracking-widest text-stone-500 uppercase">
+					<!-- The group rides along in the index so a search result can say
+					     which part of the docs it is from. -->
+					<p
+						data-pagefind-meta={group ? `group:${group}` : undefined}
+						class="text-[11px] font-bold tracking-widest text-stone-500 uppercase"
+					>
 						<a href="/docs/" class="transition-colors hover:text-stone-900">Docs</a>
 						{group && <span class="px-1.5 text-stone-300" aria-hidden="true">/</span>}
 						{group}
