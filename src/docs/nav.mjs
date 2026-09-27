@@ -29,7 +29,7 @@ export const DOCS_NAV = [
 				slug: 'configuration',
 				title: 'Configuration',
 				description:
-					'The secrets your instance reads, how to name it, how to keep your deployment separate from upstream, and how to get back in when the login is lost.'
+					'The secrets your instance reads, how to name it, how to keep your deployment separate from upstream and on the right Cloudflare account, and how to get back in when the login is lost.'
 			}
 		]
 	},
@@ -115,7 +115,7 @@ export const DOCS_NAV = [
 				slug: 'troubleshooting',
 				title: 'Troubleshooting',
 				description:
-					'The errors people actually hit — a taken bucket name, the cron-trigger limit, a 503, silent scheduling — and what fixes each.'
+					'The errors people actually hit — a taken bucket name, the cron-trigger limit, a 503, silent scheduling, a command refused for another Cloudflare account — and what fixes each.'
 			}
 		]
 	},
