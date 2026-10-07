@@ -14,6 +14,7 @@ component framework, no adapter. `dist/` deploys to Cloudflare Pages
 - `npm run check:a11y` — axe over every page; needs preview running
 - `npm run docs:sync` — rebuild `src/content/docs/` from the app repo's `docs/`
 - `npm run docs:check` — report docs drift; writes nothing
+- `npm run data:refresh` — rewrite `src/data/github.json` from the GitHub API
 - `npm run og` — regenerate `public/og.png`
 - `npm run deploy` — build + wrangler deploy
 
@@ -30,6 +31,8 @@ github.com/deepakness/cogsend, usually `../cogsend`. Copy from it; never invent.
 - mock copy ← `src/lib/components/Editor.svelte`, `src/routes/posts/+page.svelte`,
   `src/routes/insights/+page.svelte`
 - `/docs` prose ← app `docs/`, through `scripts/sync-docs.mjs`
+- header stars and release ← `src/data/github.json`, through
+  `scripts/refresh-github-data.mjs`; never hand-edit it
 
 If it changes there, change it here.
 
@@ -49,7 +52,8 @@ are documented in README.md.
   Doc styling lives in `src/styles/docs.css`, and a utility class written in a doc
   does nothing.
 - The sync also writes `src/content/docs/meta.json` (the app's `package.json`
-  version), read through `src/docs/meta.ts` by the header and the docs footer.
+  version), read through `src/docs/meta.ts` by the docs footer. The header's
+  version badge is the latest release from `src/data/github.json` instead.
 - Heading `#` links and code-block copy buttons are added by the script in
   `DocsLayout.astro`, not by the markdown pipeline; their styles are in
   `docs.css`.

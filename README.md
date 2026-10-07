@@ -36,6 +36,7 @@ npm run dev          # http://localhost:4321
 | `npm run check`   | `astro check` — types and template errors                        |
 | `npm run docs:sync` | Rebuilds `src/content/docs/` from the app repo's `docs/`        |
 | `npm run docs:check` | The same, reporting drift and writing nothing                  |
+| `npm run data:refresh` | Rewrites `src/data/github.json`: the app's stars and latest release |
 | `npm run check:a11y` | axe-core over every built page; needs `npm run preview` running |
 | `npm run og`      | Redraws `public/og.png` (a text card, drawn from the hero)        |
 | `npm run deploy`  | Build, then deploy `dist/` to Cloudflare Pages (maintainer only)   |

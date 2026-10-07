@@ -2,13 +2,11 @@
 import Logo from './Logo.astro';
 import { Book, Star } from '@lucide/astro';
 import { LINKS } from '../config';
-import { APP_VERSION } from '../docs/meta';
-import { formatStars, githubStars } from '../github-stars';
+import { formatStars, RELEASE, STARS } from '../github';
 
 /** Where the reader is, so the header can say so. Docs is the only section with pages of its own. */
 const path = Astro.url.pathname;
 const inDocs = path === '/docs' || path.startsWith('/docs/');
-const stars = await githubStars();
 
 const linkClass =
 	'flex items-center gap-1.5 py-1.5 text-[14px] font-bold transition-colors hover:text-stone-900';
@@ -21,19 +19,14 @@ const linkClass =
 				<Logo class="h-6 w-6 text-stone-900 transition-transform duration-300 group-hover:-rotate-12" />
 				<span class="text-[17px] font-extrabold tracking-tight text-stone-900">CogSend</span>
 			</a>
-			<!-- The running release, read from the app's package.json when the docs
-			     are synced. A version number says "this is maintained" faster than
-			     any sentence could. -->
-			{
-				APP_VERSION && (
-					<a
-						href={LINKS.releases}
-						class="hidden rounded-full border border-stone-200/80 bg-white px-2 py-0.5 font-mono text-[11px] font-semibold text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-900 sm:inline-block"
-					>
-						v{APP_VERSION}<span class="sr-only"> release notes</span>
-					</a>
-				)
-			}
+			<!-- The latest published release, from src/data/github.json. A version
+			     number says "this is maintained" faster than any sentence could. -->
+			<a
+				href={RELEASE.url}
+				class="hidden rounded-full border border-stone-200/80 bg-white px-2 py-0.5 font-mono text-[11px] font-semibold text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-900 sm:inline-block"
+			>
+				{RELEASE.tag}<span class="sr-only"> release notes</span>
+			</a>
 		</div>
 		<nav aria-label="Primary" class="flex items-center gap-5 sm:gap-6">
 			<a
@@ -51,15 +44,11 @@ const linkClass =
 					></path></svg
 				>
 				GitHub
-				{
-					stars !== null && (
-						<span class="ml-0.5 inline-flex items-center gap-1 rounded-full border border-stone-200/80 bg-white px-2 py-0.5 text-[12px] font-semibold text-stone-600 tabular-nums">
-							<Star class="h-3 w-3" aria-hidden="true" />
-							{formatStars(stars)}
-							<span class="sr-only"> stars</span>
-						</span>
-					)
-				}
+				<span class="ml-0.5 inline-flex items-center gap-1 rounded-full border border-stone-200/80 bg-white px-2 py-0.5 text-[12px] font-semibold text-stone-600 tabular-nums">
+					<Star class="h-3 w-3" aria-hidden="true" />
+					{formatStars(STARS)}
+					<span class="sr-only"> stars</span>
+				</span>
 			</a>
 		</nav>
 	</div>
