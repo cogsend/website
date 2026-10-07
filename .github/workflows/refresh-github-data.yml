@@ -1,0 +1,61 @@
+name: Refresh GitHub data
+
+# Keeps src/data/github.json current: the app's latest release and docs commit
+# every hour, its star count once a day. A change is committed to main, and
+# that push is the deploy — Cloudflare Pages builds every commit to main.
+# Nothing is committed when nothing changed, so a quiet hour costs no build.
+on:
+  schedule:
+    - cron: '17 * * * *'
+    # The daily run also refreshes the star count. Its own minute, so the two
+    # are told apart by github.event.schedule rather than by the clock.
+    - cron: '47 6 * * *'
+  workflow_dispatch:
+
+# Write, to push the refreshed file. The built-in token is the only one used,
+# and a push made with it starts no other workflow.
+permissions:
+  contents: write
+
+# Two runs at once would race to push the same file.
+concurrency:
+  group: refresh-github-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      # The refresh uses nothing but Node; dependencies are installed below
+      # only when there are docs to build.
+      - id: refresh
+        run: node scripts/refresh-github-data.mjs ${{ (github.event_name == 'workflow_dispatch' || github.event.schedule == '47 6 * * *') && '--stars' || '' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      # A new docs commit has to build against this repo's nav and extras
+      # before it is recorded. A page the app added or removed, or a renamed
+      # heading an extras block hangs on, fails here, where GitHub emails about
+      # it, instead of as a Cloudflare build nobody is watching — and the site
+      # keeps the last docs that worked. `prebuild` runs the sync.
+      - if: steps.refresh.outputs.docs_changed == 'true'
+        run: npm ci && npm run build
+
+      - if: steps.refresh.outputs.changed == 'true'
+        env:
+          SUMMARY: ${{ steps.refresh.outputs.summary }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/data/github.json
+          git commit -m "site: refresh GitHub data ($SUMMARY)"
+          # Someone may have pushed since the checkout. The bot only ever
+          # touches this one file, so the rebase has nothing to conflict with.
+          git pull --rebase origin main
+          git push origin HEAD:main
