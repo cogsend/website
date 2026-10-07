@@ -25,7 +25,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.12'
+          # Cloudflare Pages reads the same file; its dashboard NODE_VERSION is
+          # ignored because wrangler.jsonc makes the file the build config.
+          node-version-file: .node-version
           cache: npm
 
       - run: npm ci

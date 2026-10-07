@@ -30,7 +30,7 @@
 		"og": "node scripts/make-og.mjs"
 	},
 	"engines": {
-		"node": ">=22.12.0"
+		"node": ">=22.19.0"
 	},
 	"dependencies": {
 		"@astrojs/sitemap": "^3.7.4",
