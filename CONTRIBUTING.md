@@ -43,5 +43,5 @@ Commits follow [Conventional Commits](https://www.conventionalcommits.org/), one
 logical change each, with scopes `site`, `components`, `seo`, `ci`, `a11y` or
 `docs`.
 
-Deploying is done by the maintainer; `npm run deploy` needs access to the
-Cloudflare account.
+There is no deploy step: Cloudflare Pages builds and deploys every push to
+`main`.

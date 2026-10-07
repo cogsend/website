@@ -1,10 +1,11 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
-	"name": "cogsend-website",
+	"name": "cogsend-site",
 	"compatibility_date": "2026-09-22",
-	// Pages reads this and uploads ./dist. `npm run deploy` names a wrangler
-	// profile because the maintainer's machine has more than one Cloudflare
-	// account; nobody else needs to deploy. cogsend.com is attached on the
-	// Pages project; its CNAME is cogsend-website.pages.dev.
+	// The cogsend-site Pages project is connected to this repo and builds every
+	// push to main (`npm run build`, Node from .node-version) into ./dist; there
+	// are no preview builds. Because this file exists, Pages takes its build
+	// configuration from here and ignores variables set in the dashboard.
+	// cogsend.com is attached on the project; its CNAME is cogsend-site.pages.dev.
 	"pages_build_output_dir": "./dist"
 }

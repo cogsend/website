@@ -1,8 +1,10 @@
 # AGENTS.md
 
 Static marketing site for CogSend (cogsend.com). Astro 7 + Tailwind v4, no
-component framework, no adapter. `dist/` deploys to Cloudflare Pages
-(`wrangler.jsonc`, `npm run deploy`).
+component framework, no adapter. Cloudflare Pages (`cogsend-site`,
+`wrangler.jsonc`) builds and deploys every push to `main`; there is no manual
+deploy. A bot commits `src/data/github.json` to `main` (see the refresh workflow),
+so pull before pushing.
 
 ## Commands
 
@@ -16,7 +18,6 @@ component framework, no adapter. `dist/` deploys to Cloudflare Pages
 - `npm run docs:check` — report docs drift; writes nothing
 - `npm run data:refresh` — rewrite `src/data/github.json` from the GitHub API
 - `npm run og` — regenerate `public/og.png`
-- `npm run deploy` — build + wrangler deploy
 
 `check` and `check:a11y` must pass. CI runs both.
 

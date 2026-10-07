@@ -26,7 +26,6 @@
 		"docs:sync": "node scripts/sync-docs.mjs",
 		"docs:check": "node scripts/sync-docs.mjs --check",
 		"data:refresh": "node scripts/refresh-github-data.mjs --stars",
-		"deploy": "npm run build && wrangler pages deploy --project-name cogsend-website --branch main --profile work",
 		"check:a11y": "node scripts/check-a11y.mjs",
 		"og": "node scripts/make-og.mjs"
 	},

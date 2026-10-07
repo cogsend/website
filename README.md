@@ -39,17 +39,33 @@ npm run dev          # http://localhost:4321
 | `npm run data:refresh` | Rewrites `src/data/github.json`: the app's stars and latest release |
 | `npm run check:a11y` | axe-core over every built page; needs `npm run preview` running |
 | `npm run og`      | Redraws `public/og.png` (a text card, drawn from the hero)        |
-| `npm run deploy`  | Build, then deploy `dist/` to Cloudflare Pages (maintainer only)   |
 
 `.github/workflows/ci.yml` runs `check`, `build` and `check:a11y` on every push
 and pull request, so a contrast or labelling regression fails the build rather
 than reaching the site.
 
+## Deploying
+
+There is no deploy command. The `cogsend-site` Cloudflare Pages project is
+connected to this repo and builds every push to `main`; branches get no preview
+builds. `wrangler.jsonc` is its build configuration, which also means Pages
+ignores variables set in its dashboard — the Node version comes from
+`.node-version`, which CI reads too.
+
+The header's star count and release, and the commit the docs are built from,
+live in `src/data/github.json`. `.github/workflows/refresh-github-data.yml`
+rewrites it with `scripts/refresh-github-data.mjs` — the release and the docs
+commit every hour, the stars once a day — and commits it to `main` when
+something changed, which deploys. A quiet hour commits nothing and costs no
+build. A failed request, or a new docs commit that does not build against this
+repo's nav, fails the job and leaves the file alone, so the site keeps the last
+good numbers. Because the bot pushes to `main`, pull before you push.
+
 ## Stack
 
 Astro 7 with Tailwind 4, fully static — no adapter, because nothing renders on a
-server. Output lands in `dist/`, which `wrangler.jsonc` uploads to Cloudflare
-Pages (the `cogsend-website` project). `npm run dev` is the local server.
+server. Output lands in `dist/`, which Cloudflare Pages serves (see
+[Deploying](#deploying)). `npm run dev` is the local server.
 
 There is deliberately no component framework on top. Everything interactive is
 vanilla TypeScript in the component that owns it: the copy button
