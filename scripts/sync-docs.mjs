@@ -31,9 +31,13 @@
  * The output directory is gitignored and rebuilt on every `dev`, `check` and
  * `build`, so there is exactly one copy of the prose and it lives in the app.
  *
- * Local runs read `../cogsend/docs` (a sibling checkout). CI has no sibling, so
- * it falls back to raw.githubusercontent.com at DOCS_REF — the one thing a
- * build of this site needs from outside itself.
+ * Local runs read `../cogsend/docs` (a sibling checkout). CI and Cloudflare
+ * have no sibling, so they fall back to raw.githubusercontent.com at DOCS_REF —
+ * the one thing a build of this site needs from outside itself. DOCS_REF
+ * defaults to the commit recorded in `src/data/github.json` (the last one on
+ * main to touch `docs/`), so the same commit of this site always builds the
+ * same docs, and a docs edit in the app ships when the hourly refresh records
+ * it.
  */
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
@@ -45,8 +49,11 @@ const OUT_DIR = join(root, 'src/content/docs');
 const EXTRAS_DIR = join(root, 'src/docs/extras');
 
 const REPO = 'deepakness/cogsend';
-const REF = process.env.DOCS_REF ?? 'main';
-const BLOB = `https://github.com/${REPO}/blob/${REF}`;
+const REF =
+	process.env.DOCS_REF ?? JSON.parse(readFileSync(join(root, 'src/data/github.json'), 'utf8')).docs;
+// Links that leave the docs folder (`../CONTRIBUTING.md`) point at main, not at
+// the recorded commit: a reader following one wants the file as it is now.
+const BLOB = `https://github.com/${REPO}/blob/${process.env.DOCS_REF ?? 'main'}`;
 const RAW = `https://raw.githubusercontent.com/${REPO}/${REF}/docs`;
 
 /** What counts as an asset rather than a page, for the messages below. */
@@ -89,25 +96,6 @@ async function readSource(dir, item) {
 		);
 	}
 	return res.text();
-}
-
-/**
- * The app version the docs were read from: `package.json` next to the `docs/`
- * folder, or the same file at DOCS_REF. It is printed on every docs page so a
- * reader on an older release can tell the page may describe something newer.
- * Null rather than a failure when it cannot be read — it is a label, not a
- * contract.
- */
-async function readAppVersion(dir) {
-	try {
-		const text = dir
-			? readFileSync(join(dir, '..', 'package.json'), 'utf8')
-			: await (await fetch(`${RAW.replace(/\/docs$/, '')}/package.json`)).text();
-		const version = JSON.parse(text).version;
-		return typeof version === 'string' ? version : null;
-	} catch {
-		return null;
-	}
 }
 
 /** A doc in the folder that nobody linked: the app grew a page the site lost. */
@@ -360,14 +348,6 @@ for (const { item, body } of pages) {
 		written.push(item.slug);
 		if (!CHECK) writeFileSync(file, output);
 	}
-}
-
-// Read by `src/docs/meta.ts`. JSON rather than frontmatter because the header
-// and the footer show it on pages that are not docs at all.
-const meta = `${JSON.stringify({ ref: REF, version: await readAppVersion(source) }, null, '\t')}\n`;
-const metaFile = join(OUT_DIR, 'meta.json');
-if (!CHECK && (!existsSync(metaFile) || readFileSync(metaFile, 'utf8') !== meta)) {
-	writeFileSync(metaFile, meta);
 }
 
 for (const name of existsSync(OUT_DIR) ? readdirSync(OUT_DIR) : []) {

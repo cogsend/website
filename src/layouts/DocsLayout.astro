@@ -7,7 +7,7 @@ import DocsSearch from '../components/DocsSearch.astro';
 import DocsToc from '../components/DocsToc.astro';
 import { ChevronDown, ArrowLeft, ArrowRight } from '@lucide/astro';
 import { LINKS, SITE } from '../config';
-import { APP_VERSION } from '../docs/meta';
+import { RELEASE } from '../github';
 import '../styles/docs.css';
 
 interface Props {
@@ -197,7 +197,7 @@ const FOOT_LINK =
 				{
 					source && (
 						<p class="mt-8 text-[12.5px] leading-relaxed font-medium text-stone-500">
-							{APP_VERSION && <>Written for CogSend {APP_VERSION}. </>}
+							Written for CogSend {RELEASE.tag}.
 							This page lives in the app repo, next to the code it describes. Something
 							wrong or missing?{' '}
 							<a href={`${LINKS.repo}/blob/main/${source}`} class={FOOT_LINK}>

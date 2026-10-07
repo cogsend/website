@@ -31,8 +31,8 @@ github.com/deepakness/cogsend, usually `../cogsend`. Copy from it; never invent.
 - mock copy ← `src/lib/components/Editor.svelte`, `src/routes/posts/+page.svelte`,
   `src/routes/insights/+page.svelte`
 - `/docs` prose ← app `docs/`, through `scripts/sync-docs.mjs`
-- header stars and release ← `src/data/github.json`, through
-  `scripts/refresh-github-data.mjs`; never hand-edit it
+- header stars and release, and the docs commit ← `src/data/github.json`,
+  through `scripts/refresh-github-data.mjs`; never hand-edit it
 
 If it changes there, change it here.
 
@@ -51,9 +51,12 @@ are documented in README.md.
 - Markdown under `src/content/docs/` is gitignored, so Tailwind never scans it.
   Doc styling lives in `src/styles/docs.css`, and a utility class written in a doc
   does nothing.
-- The sync also writes `src/content/docs/meta.json` (the app's `package.json`
-  version), read through `src/docs/meta.ts` by the docs footer. The header's
-  version badge is the latest release from `src/data/github.json` instead.
+- Without a sibling checkout (CI, Cloudflare) the sync reads the app at the
+  `docs` commit in `src/data/github.json`, the last commit on main to touch
+  `docs/`. A docs edit in the app ships when the hourly refresh records it, not
+  before. `DOCS_REF` overrides it. A nav or extras change that follows a new
+  app docs commit needs `npm run data:refresh` in the same commit, or the build
+  reads the old docs against the new nav and fails.
 - Heading `#` links and code-block copy buttons are added by the script in
   `DocsLayout.astro`, not by the markdown pipeline; their styles are in
   `docs.css`.

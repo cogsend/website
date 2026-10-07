@@ -86,9 +86,17 @@ sends no CSP, for exactly this reason.
 repo: `scripts/sync-docs.mjs` reads the app's `docs/` folder, rewrites its
 relative links into site ones, splices in the site-only additions, and writes
 `src/content/docs/` — which is gitignored and rebuilt by `predev`, `precheck` and
-`prebuild`. Locally it reads the sibling checkout at `../cogsend/docs`; CI has no
-sibling, so it falls back to `raw.githubusercontent.com` at `DOCS_REF` (default
-`main`).
+`prebuild`. Locally it reads the sibling checkout at `../cogsend/docs`; CI and
+Cloudflare have no sibling, so they fall back to `raw.githubusercontent.com` at
+`DOCS_REF`. That defaults to the `docs` commit in `src/data/github.json` — the
+last commit on the app's main to touch `docs/` — so a given commit here always
+builds the same docs. The docs follow main rather than the latest release
+because the install command clones main.
+
+So when a nav or extras change here follows a docs change in the app — a new
+page, a renamed heading — run `npm run data:refresh` and commit
+`src/data/github.json` with it. Otherwise the build reads the docs at the old
+commit against the new nav and fails, until the hourly refresh catches up.
 
 `src/docs/nav.mjs` is the other half of that contract: the sidebar order, the
 group a page sits in, its title, its one-line description, and which file in the
