@@ -6,7 +6,7 @@ import { LINKS } from './config';
  * `src/data/github.json` by `scripts/refresh-github-data.mjs`. Reading a file
  * rather than the API means visitors never call GitHub, the CSP stays as it is,
  * and a build cannot ship without a number because GitHub was slow. The numbers
- * are as fresh as the last refresh: hourly for a release, daily for stars.
+ * are as fresh as the last refresh: about hourly, stars at most every 3 hours.
  */
 export const STARS: number = data.stars;
 

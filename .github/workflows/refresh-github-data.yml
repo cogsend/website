@@ -1,15 +1,15 @@
 name: Refresh GitHub data
 
-# Keeps src/data/github.json current: the app's latest release and docs commit
-# every hour, its star count once a day. A change is committed to main, and
+# Keeps src/data/github.json current: the app's latest release, docs commit
+# and star count, read together every hour. A change is committed to main, and
 # that push is the deploy — Cloudflare Pages builds every commit to main.
-# Nothing is committed when nothing changed, so a quiet hour costs no build.
+# Nothing is committed when nothing changed, so a quiet hour costs no build, and
+# a change to the stars alone waits until the last commit is 3 hours old (see
+# the script). GitHub delays and sometimes drops scheduled runs; nothing here
+# depends on any one of them happening.
 on:
   schedule:
     - cron: '17 * * * *'
-    # The daily run also refreshes the star count. Its own minute, so the two
-    # are told apart by github.event.schedule rather than by the clock.
-    - cron: '47 6 * * *'
   workflow_dispatch:
 
 # Write, to push the refreshed file. The built-in token is the only one used,
@@ -26,7 +26,11 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     steps:
+      # Full history, so the script can see when the data file was last
+      # committed; a shallow clone would let every star change through.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -35,7 +39,7 @@ jobs:
       # The refresh uses nothing but Node; dependencies are installed below
       # only when there are docs to build.
       - id: refresh
-        run: node scripts/refresh-github-data.mjs ${{ (github.event_name == 'workflow_dispatch' || github.event.schedule == '47 6 * * *') && '--stars' || '' }}
+        run: node scripts/refresh-github-data.mjs ${{ github.event_name == 'workflow_dispatch' && '--stars' || '' }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
 

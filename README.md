@@ -54,10 +54,12 @@ ignores variables set in its dashboard — the Node version comes from
 
 The header's star count and release, and the commit the docs are built from,
 live in `src/data/github.json`. `.github/workflows/refresh-github-data.yml`
-rewrites it with `scripts/refresh-github-data.mjs` — the release and the docs
-commit every hour, the stars once a day — and commits it to `main` when
-something changed, which deploys. A quiet hour commits nothing and costs no
-build. A failed request, or a new docs commit that does not build against this
+rewrites it with `scripts/refresh-github-data.mjs` every hour and commits it to
+`main` when something changed, which deploys. A quiet hour commits nothing and
+costs no build. A new release or docs commit is written straight away; a change
+to the star count alone waits until the file's last commit is 3 hours old, so
+stars can never use up the 500 builds a month Pages allows. GitHub runs
+scheduled workflows late and sometimes skips them, so "hourly" is a target. A failed request, or a new docs commit that does not build against this
 repo's nav, fails the job and leaves the file alone, so the site keeps the last
 good numbers. Because the bot pushes to `main`, pull before you push.
 
