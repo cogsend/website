@@ -48,7 +48,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(root, 'src/content/docs');
 const EXTRAS_DIR = join(root, 'src/docs/extras');
 
-const REPO = 'deepakness/cogsend';
+const REPO = 'cogsend/cogsend';
 const REF =
 	process.env.DOCS_REF ?? JSON.parse(readFileSync(join(root, 'src/data/github.json'), 'utf8')).docs;
 // Links that leave the docs folder (`../CONTRIBUTING.md`) point at main, not at

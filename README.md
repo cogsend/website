@@ -1,6 +1,6 @@
 # cogsend.com
 
-The marketing site for [CogSend](https://github.com/deepakness/cogsend) — a
+The marketing site for [CogSend](https://github.com/cogsend/cogsend) — a
 self-hosted social scheduler for Mastodon, Bluesky, LinkedIn, Threads and X.
 
 There are two halves: the homepage, and `/docs`. The docs are written in the app
@@ -8,7 +8,7 @@ repo's `docs/` folder and rendered here by `scripts/sync-docs.mjs`, so the app
 stays the source of truth for the words and this repo owns how they read.
 
 Found a mistake in the docs? Fix it in the app repo's
-[`docs/`](https://github.com/deepakness/cogsend/tree/main/docs) folder. Anything
+[`docs/`](https://github.com/cogsend/cogsend/tree/main/docs) folder. Anything
 about the site itself is a pull request here; see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 The page is `Header → Hero → Features → Install → Faq → Cta → Footer`, with `Cta`

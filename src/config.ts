@@ -14,12 +14,12 @@ export const SITE = {
 } as const;
 
 export const LINKS = {
-	repo: 'https://github.com/deepakness/cogsend',
-	releases: 'https://github.com/deepakness/cogsend/releases',
-	issues: 'https://github.com/deepakness/cogsend/issues',
-	security: 'https://github.com/deepakness/cogsend/blob/main/SECURITY.md',
-	license: 'https://github.com/deepakness/cogsend/blob/main/LICENSE',
-	siteRepo: 'https://github.com/deepakness/cogsend-website',
+	repo: 'https://github.com/cogsend/cogsend',
+	releases: 'https://github.com/cogsend/cogsend/releases',
+	issues: 'https://github.com/cogsend/cogsend/issues',
+	security: 'https://github.com/cogsend/cogsend/blob/main/SECURITY.md',
+	license: 'https://github.com/cogsend/cogsend/blob/main/LICENSE',
+	siteRepo: 'https://github.com/cogsend/website',
 	// The docs are written in the app repo and rendered here by
 	// `scripts/sync-docs.mjs`, which is why these are paths on this site rather
 	// than links into GitHub. The app repo's `docs/` folder is still the place
@@ -70,7 +70,7 @@ export const OG_IMAGE = {
 /**
  * The app's README prints the install as two lines:
  *
- *     git clone --depth 1 https://github.com/deepakness/cogsend.git cogsend
+ *     git clone --depth 1 https://github.com/cogsend/cogsend.git cogsend
  *     cd cogsend && npm install && npm run setup
  *
  * Joined with `&&` it is one paste that actually installs, which is what the
@@ -78,7 +78,7 @@ export const OG_IMAGE = {
  * README — this is the one string on the site that has to be exact.
  */
 export const INSTALL_COMMAND =
-	'git clone --depth 1 https://github.com/deepakness/cogsend.git cogsend && cd cogsend && npm install && npm run setup';
+	'git clone --depth 1 https://github.com/cogsend/cogsend.git cogsend && cd cogsend && npm install && npm run setup';
 
 /**
  * Cloudflare Web Analytics. Empty until the site has its own Web Analytics

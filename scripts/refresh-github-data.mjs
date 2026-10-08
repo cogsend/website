@@ -39,7 +39,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const FILE = join(root, 'src/data/github.json');
 
-const REPO = 'deepakness/cogsend';
+const REPO = 'cogsend/cogsend';
 const API = `https://api.github.com/repos/${REPO}`;
 
 /**

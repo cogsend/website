@@ -5,7 +5,7 @@ Thanks for helping. Two things decide where a change goes.
 ## Docs: change them in the app repo
 
 The pages under [cogsend.com/docs](https://cogsend.com/docs/) are written in the
-app repository's [`docs/`](https://github.com/deepakness/cogsend/tree/main/docs)
+app repository's [`docs/`](https://github.com/cogsend/cogsend/tree/main/docs)
 folder and copied here at build time. A fix to what a page *says* is a pull
 request there; every page has an "Edit" link that goes straight to its file.
 

@@ -23,7 +23,7 @@ so pull before pushing.
 
 ## The app repo is the source of truth
 
-github.com/deepakness/cogsend, usually `../cogsend`. Copy from it; never invent.
+github.com/cogsend/cogsend, usually `../cogsend`. Copy from it; never invent.
 
 - `config.ts` `INSTALL_COMMAND` ← app `README.md` install block
 - `SocialIcon.astro` ← `src/lib/domain/platform-marks.ts`

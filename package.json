@@ -9,10 +9,10 @@
 	"homepage": "https://cogsend.com",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/deepakness/cogsend-website.git"
+		"url": "git+https://github.com/cogsend/website.git"
 	},
 	"bugs": {
-		"url": "https://github.com/deepakness/cogsend-website/issues"
+		"url": "https://github.com/cogsend/website/issues"
 	},
 	"scripts": {
 		"dev": "astro dev",
