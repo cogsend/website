@@ -29,7 +29,7 @@ export const DOCS_NAV = [
 				slug: 'updates',
 				title: 'Updating',
 				description:
-					'Update from Settings with a Cloudflare token or from a checkout, roll back, and why the in-app update is safe to run.'
+					'Update from Settings, through your repository’s GitHub Action, or from a checkout; roll back; and why each is safe.'
 			},
 			{
 				slug: 'configuration',
