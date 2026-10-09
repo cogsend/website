@@ -25,7 +25,7 @@ so pull before pushing.
 
 github.com/cogsend/cogsend, usually `../cogsend`. Copy from it; never invent.
 
-- `config.ts` `INSTALL_COMMAND` ← app `README.md` install block
+- `config.ts` `LINKS.deployButton` ← app `README.md` Deploy to Cloudflare link; `Install.astro` terminal lines ← its terminal install block
 - `SocialIcon.astro` ← `src/lib/domain/platform-marks.ts`
 - `global.css` tokens ← `src/routes/layout.css` + Tailwind stone classes
 - `Logo.astro` ← Cog Four favicon path

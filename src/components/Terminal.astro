@@ -22,8 +22,7 @@ const payload = lines.filter((line) => !line.startsWith('#')).join('\n');
 const rows = lines.map((line) => (line.startsWith('#') ? line : `$ ${line}`).split(/(?<=\/)(?!\/)/));
 ---
 
-<!-- The copy handler lives in CopyCommand.astro and is delegated from
-     document, so every [data-copy] button on the page shares it. -->
+<!-- The copy handler is src/scripts/copy-buttons.ts, imported below. -->
 <div
 	class:list={[
 		'group relative flex items-start gap-3 rounded-2xl bg-stone-900 p-4 pr-3 shadow-ink',
@@ -47,3 +46,7 @@ const rows = lines.map((line) => (line.startsWith('#') ? line : `$ ${line}`).spl
 		<Check class="hidden h-3.5 w-3.5 text-emerald-400 group-data-[copied]:block" />
 	</button>
 </div>
+
+<script>
+	import '../scripts/copy-buttons';
+</script>

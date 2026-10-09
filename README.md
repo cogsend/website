@@ -71,8 +71,8 @@ server. Output lands in `dist/`, which Cloudflare Pages serves (see
 
 There is deliberately no component framework on top. Everything interactive is
 vanilla TypeScript in the component that owns it: the copy button
-(`CopyCommand.astro`, delegated from `document` so every `[data-copy]` button
-shares one listener), the simulated composer (`MockEditor.astro`), the demo
+(`src/scripts/copy-buttons.ts`, delegated from `document` so every `[data-copy]`
+button shares one listener), the simulated composer (`MockEditor.astro`), the demo
 dialog (`Hero.astro`), and on the docs side the search box (`DocsSearch.astro`)
 and the table of contents (`DocsToc.astro`).
 
@@ -280,9 +280,10 @@ the strings `scripts/setup.mjs` and `scripts/doctor.mjs` print, the Settings
 link). Pointing those here is a change in that repo, not this one, and nothing
 here depends on it.
 
-`INSTALL_COMMAND` lives there too and is the app README's two-line install block
-joined with `&&`, so one paste installs. It is the one string on the site that has
-to match the app exactly; if the app's README changes, change it here.
+`LINKS.deployButton` lives there too: the Deploy to Cloudflare link, the site's
+recommended install, which the app README uses as well. The terminal steps in
+`Install.astro` are the app README's terminal install block and have to match it
+exactly; if the app's README changes, change them here.
 
 ## License
 

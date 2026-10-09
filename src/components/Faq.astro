@@ -25,7 +25,7 @@ const faqLd = {
 		],
 		[
 			'Do I need a developer app for every platform?',
-			'No. Mastodon and Bluesky connect with what you already have. LinkedIn, Threads and X need an app you register with them first. X also charges for posting: its API is pay-per-use, so fund a small balance before you connect it. If you would rather not register apps, you can connect them through Zernio instead. It has a free plan, though X needs a card there.'
+			'No. Mastodon and Bluesky connect with what you already have. LinkedIn, Threads and X need an app you register with them first: the app walks you through it, takes the credentials in a form, and can hand the setup to a browser agent. X also charges for posting: its API is pay-per-use, so fund a small balance before you connect it. If you would rather not register apps, you can connect them through Zernio instead. It has a free plan, though X needs a card there.'
 		],
 		[
 			'Can AI agents like Claude Code use CogSend?',
@@ -33,11 +33,11 @@ const faqLd = {
 		],
 		[
 			'How do I update it later?',
-			'Pull the new code and run npm ci, then npm run deploy:release, which runs the tests, applies database migrations, rebuilds and deploys. Your data lives in your Cloudflare account, never in the repository, so a pull cannot touch it.'
+			'CogSend tells you when a release is out, with a dot on your avatar and a line in Settings. Installed with the Deploy to Cloudflare button, run the Update CogSend action in your repository, or let it install patch releases by itself; no Cloudflare token is needed. Any install can also update from Settings with a Cloudflare token, which it can remember, locked with your password, or from a checkout with npm run deploy:release. Your posts and secrets live in your Cloudflare account, so an update cannot touch them.'
 		],
 		[
 			'Where do my posts and credentials live?',
-			'In your Cloudflare account, in the database and bucket that setup created. Platform tokens are encrypted at rest with AES-256-GCM, and the single admin account signs in with an authenticator app and backup codes.'
+			'In your Cloudflare account, in the database and bucket the deploy created. Platform tokens are encrypted at rest with AES-256-GCM, and the single admin account signs in with an authenticator app and backup codes.'
 		]
 	].map(([name, text]) => ({
 		'@type': 'Question',
@@ -110,7 +110,8 @@ const faqLd = {
 			<p class={ANSWER_CLASS}>
 				No. Mastodon and Bluesky connect with what you already have. LinkedIn, Threads and X need an
 				app you register with them first, because they issue the client id and secret your Worker
-				uses — pick one and the app shows you exactly what to create.
+				uses. Pick one and the app shows you exactly what to create, takes the credentials in a
+				form, and can hand the whole setup to a browser agent.
 			</p>
 			<p class={`mt-3 ${ANSWER_CLASS}`}>
 				X also charges for posting. Its API is pay-per-use, so fund a small balance before you
@@ -144,16 +145,18 @@ const faqLd = {
 				How do I update it later?
 			</h3>
 			<p class={ANSWER_CLASS}>
-				Pull the new code and run the release script. That runs the tests, applies database
-				migrations, rebuilds and deploys:
+				CogSend tells you when a release is out, with a dot on your avatar and a line in Settings.
+				Installed with the Deploy to Cloudflare button, run the <strong>Update CogSend</strong> action
+				in your repository, which checks the release's signature and lets Cloudflare deploy it, or
+				let it install patch releases by itself. No Cloudflare token is needed.
 			</p>
-			<pre
-				class="mt-4 overflow-x-auto rounded-2xl border border-stone-200/80 bg-white px-4 py-3 font-mono text-[12.5px] leading-relaxed font-medium text-stone-900 shadow-pill"><code>git pull
-npm ci
-npm run deploy:release</code></pre>
-			<p class={`mt-4 ${ANSWER_CLASS}`}>
-				Settings tells you when a newer release is out. Your data is never in the repository, so a
-				pull cannot touch it — posts, images and secrets live in your Cloudflare account.
+			<p class={`mt-3 ${ANSWER_CLASS}`}>
+				Any install can also update from Settings with a Cloudflare token, which it can remember,
+				locked with your password, or from a checkout with <code class="font-mono text-[13px]"
+					>npm run deploy:release</code
+				>. Your posts, images and secrets live in your Cloudflare account, so an update cannot
+				touch them. See{' '}
+				<a href={LINKS.updates} class={LINK_CLASS}>Updating</a>.
 			</p>
 		</li>
 
@@ -162,7 +165,7 @@ npm run deploy:release</code></pre>
 				Where do my posts and credentials live?
 			</h3>
 			<p class={ANSWER_CLASS}>
-				In your Cloudflare account, in the database and bucket that setup created for you. Platform
+				In your Cloudflare account, in the database and bucket the deploy created for you. Platform
 				tokens are encrypted at rest with AES-256-GCM, and the single admin account signs in with an
 				authenticator app and backup codes. Nothing about your instance lives with us.
 			</p>

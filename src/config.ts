@@ -26,6 +26,12 @@ export const LINKS = {
 	// the text is edited.
 	docs: '/docs/',
 	deploy: '/docs/deploy/',
+	updates: '/docs/updates/',
+	// The recommended install: Cloudflare copies the prebuilt release in
+	// cogsend/deploy into the visitor's GitHub or GitLab and deploys it.
+	deployButton: 'https://deploy.workers.cloudflare.com/?url=https://github.com/cogsend/deploy',
+	/** Generates the APP_ENCRYPTION_KEY the button's form asks for. */
+	key: '/key/',
 	configuration: '/docs/configuration/',
 	composer: '/docs/composer/',
 	oauth: '/docs/oauth-apps/',
@@ -66,19 +72,6 @@ export const OG_IMAGE = {
 	height: 630,
 	alt: 'CogSend — your social scheduler, on your own Cloudflare account.'
 } as const;
-
-/**
- * The app's README prints the install as two lines:
- *
- *     git clone --depth 1 https://github.com/cogsend/cogsend.git cogsend
- *     cd cogsend && npm install && npm run setup
- *
- * Joined with `&&` it is one paste that actually installs, which is what the
- * hero and the closing call to action copy. Keep it identical to the app's
- * README — this is the one string on the site that has to be exact.
- */
-export const INSTALL_COMMAND =
-	'git clone --depth 1 https://github.com/cogsend/cogsend.git cogsend && cd cogsend && npm install && npm run setup';
 
 /**
  * Cloudflare Web Analytics. Empty until the site has its own Web Analytics

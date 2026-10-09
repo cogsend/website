@@ -1,7 +1,7 @@
 ---
 import MockEditor from './MockEditor.astro';
-import CopyCommand from './CopyCommand.astro';
-import { DEMO_VIDEO, INSTALL_COMMAND, LINKS } from '../config';
+import DeployButton from './DeployButton.astro';
+import { DEMO_VIDEO, LINKS } from '../config';
 import { LoaderCircle, Play, Star, X } from '@lucide/astro';
 ---
 
@@ -40,23 +40,27 @@ import { LoaderCircle, Play, Star, X } from '@lucide/astro';
 			then publish it now or schedule it. No subscription — it runs on Cloudflare's free plan.
 		</p>
 
-		<!-- Wide enough for the full install command to wrap onto two clean
-		     lines instead of three ragged ones. -->
-		<div class="mx-auto mt-10 flex max-w-2xl flex-col items-center gap-6">
-			<CopyCommand
-				command={INSTALL_COMMAND}
-				tone="dark"
-				note="Node 22.12+, a Cloudflare account, and five minutes."
-			/>
+		<!-- One click is the recommended install; the terminal stays a link away
+		     for anyone who wants to change the code. -->
+		<div class="mx-auto mt-10 flex max-w-2xl flex-col items-center gap-4">
+			<DeployButton size="lg" />
+			<p class="max-w-md text-balance text-[13px] leading-relaxed font-medium text-stone-500">
+				No terminal, nothing to install: Cloudflare copies a prebuilt release into your GitHub and
+				deploys it. Bring a Cloudflare account and an <a
+					href={LINKS.key}
+					class="font-bold text-stone-700 underline decoration-stone-300 underline-offset-2 hover:text-stone-900"
+					>encryption key</a
+				>.
+			</p>
 
 			<!-- The demo is a button, not a link: it opens a dialog, so the second
 			     CTA can carry the GitHub mark without implying the video leaves
 			     the page. Both mirror the closing section's button pair. -->
-			<div class="flex flex-wrap items-center justify-center gap-3">
+			<div class="mt-2 flex flex-wrap items-center justify-center gap-3">
 				<button
 					type="button"
 					data-demo-open
-					class="flex items-center gap-2 rounded-full bg-stone-900 px-6 py-3 text-[13px] font-bold text-white shadow-ink transition-all hover:-translate-y-0.5 hover:bg-stone-800"
+					class="flex items-center gap-2 rounded-full border border-stone-200 bg-white px-6 py-3 text-[13px] font-bold text-stone-700 shadow-pill transition-all hover:-translate-y-0.5 hover:border-stone-300 hover:text-stone-900"
 				>
 					<Play class="h-4 w-4 fill-current" />
 					Watch demo
@@ -69,6 +73,11 @@ import { LoaderCircle, Play, Star, X } from '@lucide/astro';
 					Star on GitHub
 				</a>
 			</div>
+			<a
+				href="#install-terminal"
+				class="text-[13px] font-bold text-stone-500 underline decoration-stone-300 underline-offset-2 hover:text-stone-900"
+				>Prefer a terminal?</a
+			>
 		</div>
 
 		<!-- Interactive App Mock -->
