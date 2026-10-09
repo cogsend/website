@@ -23,7 +23,13 @@ export const DOCS_NAV = [
 				slug: 'deploy',
 				title: 'Install and deploy',
 				description:
-					'One command that creates the database, the bucket, the secrets and the account, then deploys the Worker — and how to update or roll back afterwards.'
+					'The Deploy to Cloudflare button, or one command that creates the database, the bucket, the secrets and the account, then deploys the Worker.'
+			},
+			{
+				slug: 'updates',
+				title: 'Updating',
+				description:
+					'Update from Settings with a Cloudflare token or from a checkout, roll back, and why the in-app update is safe to run.'
 			},
 			{
 				slug: 'configuration',
