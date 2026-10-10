@@ -180,7 +180,10 @@ resolve is rewritten into a preload helper pointing at nothing.
 ## Analytics
 
 `Layout.astro` renders both beacons, so every page is covered without a page
-having to remember anything:
+having to remember anything. The one exception is `/key/`, which passes
+`analytics={false}`: it promises the key it makes is never sent, so it loads no
+third-party script, and `public/_headers` gives it a second, stricter policy
+with `connect-src 'none'`.
 
 - **Umami**, self-hosted on `umami.vempus.com`, is always on. The script, the
   website id and the tracked hostname are the `UMAMI` constant in

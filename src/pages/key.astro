@@ -2,101 +2,312 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import DeployButton from '../components/DeployButton.astro';
+import {
+	Check,
+	ChevronDown,
+	Copy,
+	Download,
+	Laptop,
+	RefreshCw,
+	ShieldCheck,
+	WifiOff
+} from '@lucide/astro';
 import { LINKS } from '../config';
+// The exact code that makes the key, shown on the page so a reader can check
+// it. Keep that file short and its comment written for them.
+import keySource from '../scripts/generate-key.ts?raw';
+
+const STEPS = ['Generate a key', 'Deploy to Cloudflare', 'Create your account'];
+
+const sourceUrl = `${LINKS.siteRepo}/blob/main/src/pages/key.astro`;
 ---
 
 <Layout
 	title="Generate an encryption key — CogSend"
-	description="Generate the APP_ENCRYPTION_KEY a CogSend instance needs, in your browser. Nothing is sent anywhere."
+	description="Generate the APP_ENCRYPTION_KEY a CogSend instance needs. It is made in your browser, and the page cannot send it anywhere."
+	analytics={false}
 >
 	<Header />
-	<main id="main" class="mx-auto w-full max-w-2xl flex-1 px-6 py-20 sm:py-28">
-		<p class="text-[14px] font-bold tracking-widest text-stone-500 uppercase">Deploy</p>
+	<main id="main" class="mx-auto w-full max-w-2xl flex-1 px-6 py-14 sm:py-20">
+		<ol aria-label="Deploying CogSend" class="flex flex-wrap items-center gap-2 text-[13px] font-bold">
+			{
+				STEPS.map((step, i) => (
+					<li
+						aria-current={i === 0 ? 'step' : undefined}
+						class:list={[
+							'flex items-center gap-2 rounded-full border px-3 py-1.5',
+							i === 0
+								? 'border-stone-900 bg-stone-900 text-white'
+								: 'border-stone-200 bg-white text-stone-500'
+						]}
+					>
+						<span class="tabular-nums">{i + 1}</span>
+						{step}
+					</li>
+				))
+			}
+		</ol>
+
 		<h1
-			class="mt-4 text-[2.25rem] leading-tight font-extrabold tracking-tight text-stone-900 sm:text-[2.75rem]"
+			class="mt-8 text-[2.25rem] leading-tight font-extrabold tracking-tight text-stone-900 sm:text-[2.75rem]"
 		>
 			Your encryption key
 		</h1>
 		<p class="mt-4 text-[16px] leading-relaxed font-medium text-stone-500">
-			Paste this into the <code class="font-mono text-stone-800">APP_ENCRYPTION_KEY</code> field when
-			you deploy CogSend. It was generated in this browser and has not been sent anywhere.
+			Paste it into the <code class="font-mono text-stone-800">APP_ENCRYPTION_KEY</code> field of the
+			deploy form, and keep a copy: your first visit to CogSend asks for it again.
 		</p>
 
-		<div class="mt-8 rounded-[1.5rem] border border-stone-200 bg-white p-5 shadow-pill">
+		<section
+			aria-labelledby="key-label"
+			class="mt-8 rounded-[1.5rem] border border-stone-200 bg-white p-5 shadow-pill sm:p-6"
+		>
+			<div class="flex flex-wrap items-center justify-between gap-2">
+				<h2 id="key-label" class="text-[13px] font-bold tracking-widest text-stone-500 uppercase">
+					APP_ENCRYPTION_KEY
+				</h2>
+				<p
+					class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[12px] font-bold text-emerald-800"
+				>
+					<ShieldCheck class="h-3.5 w-3.5" aria-hidden="true" />
+					Made in this browser, sent nowhere
+				</p>
+			</div>
+			<!-- Groups of eight are easier to compare by eye. They are inline-block
+			     spans with no text between them, so selecting the key by hand still
+			     copies one unbroken string; flex items would copy one per line. -->
 			<output
 				id="key"
-				class="block font-mono text-[15px] leading-relaxed font-bold break-all text-stone-900 select-all"
-				aria-live="polite">Generating…</output
+				aria-label="Encryption key"
+				class="mt-4 block font-mono text-[16px] leading-relaxed font-bold text-stone-900 select-all sm:text-[17px]"
+				>Generating…</output
 			>
-			<div class="mt-4 flex flex-wrap items-center gap-3">
+			<div class="mt-5 flex flex-wrap items-center gap-3">
 				<button
 					id="copy"
 					type="button"
-					class="rounded-full bg-stone-900 px-6 py-3 text-[13px] font-bold text-white shadow-ink transition-all hover:-translate-y-0.5 hover:bg-stone-800"
+					class="inline-flex items-center gap-2 rounded-full bg-stone-900 px-6 py-3 text-[13px] font-bold text-white shadow-ink transition-all hover:-translate-y-0.5 hover:bg-stone-800"
 				>
-					Copy
+					<Copy class="h-4 w-4" aria-hidden="true" data-icon="copy" />
+					<Check class="hidden h-4 w-4" aria-hidden="true" data-icon="copied" />
+					<span data-label>Copy key</span>
+				</button>
+				<button
+					id="download"
+					type="button"
+					class="inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white px-5 py-3 text-[13px] font-bold text-stone-700 shadow-pill transition-all hover:-translate-y-0.5 hover:border-stone-300 hover:text-stone-900"
+				>
+					<Download class="h-4 w-4" aria-hidden="true" />
+					Download .txt
 				</button>
 				<button
 					id="regenerate"
 					type="button"
-					class="rounded-full border border-stone-200 bg-white px-6 py-3 text-[13px] font-bold text-stone-700 shadow-pill transition-all hover:-translate-y-0.5 hover:border-stone-300 hover:text-stone-900"
+					class="inline-flex items-center gap-2 rounded-full px-3 py-3 text-[13px] font-bold text-stone-600 transition-colors hover:text-stone-900"
 				>
+					<RefreshCw class="h-4 w-4" aria-hidden="true" />
 					Generate another
 				</button>
-				<span id="status" class="text-[13px] font-bold text-stone-500" role="status"></span>
 			</div>
-		</div>
+			<p id="status" class="mt-3 min-h-5 text-[13px] font-bold text-stone-500" role="status"></p>
+		</section>
 
-		<h2 class="mt-12 text-[1.25rem] font-extrabold tracking-tight text-stone-900">
-			Save it before you continue
-		</h2>
-		<ul class="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-relaxed font-medium text-stone-600">
-			<li>
-				Your first visit to the new instance asks for it again, to prove the instance is yours before
-				it creates your account.
-			</li>
-			<li>
-				It encrypts the account tokens CogSend stores. Nothing can recover it, and replacing it means
-				reconnecting every account, so keep it in your password manager.
-			</li>
-			<li>Treat it like a password: anyone holding it and your database can read those tokens.</li>
-		</ul>
-		<p class="mt-8 text-[15px] leading-relaxed font-medium text-stone-500">
-			Prefer a terminal? <code class="font-mono text-stone-800">openssl rand -hex 32</code> makes
-			the same kind of key. Next: <a
-				href={`${LINKS.docs}deploy/`}
-				class="font-bold text-stone-900 underline underline-offset-2">the deploy guide</a
-			>.
-		</p>
+		<section aria-labelledby="private-heading" class="mt-6 rounded-[1.5rem] bg-stone-100/70 p-5 sm:p-6">
+			<h2 id="private-heading" class="text-[1.05rem] font-extrabold tracking-tight text-stone-900">
+				Only you have seen this key
+			</h2>
+			<ul class="mt-4 grid gap-4 sm:grid-cols-3">
+				<li>
+					<Laptop class="h-5 w-5 text-stone-700" aria-hidden="true" />
+					<p class="mt-2 text-[14px] font-bold text-stone-900">Made in your browser</p>
+					<p class="mt-1 text-[13px] leading-relaxed font-medium text-stone-600">
+						By its cryptographic random generator, the same kind of key as <code
+							class="font-mono text-stone-800">openssl rand -hex 32</code
+						> prints.
+					</p>
+				</li>
+				<li>
+					<ShieldCheck class="h-5 w-5 text-stone-700" aria-hidden="true" />
+					<p class="mt-2 text-[14px] font-bold text-stone-900">Never sent or stored</p>
+					<p class="mt-1 text-[13px] leading-relaxed font-medium text-stone-600">
+						This page has no analytics, and its security policy forbids it from connecting to any
+						server. Nothing is saved: reload, and the key is gone.
+					</p>
+				</li>
+				<li>
+					<WifiOff class="h-5 w-5 text-stone-700" aria-hidden="true" />
+					<p class="mt-2 text-[14px] font-bold text-stone-900">Check it yourself</p>
+					<p class="mt-1 text-[13px] leading-relaxed font-medium text-stone-600">
+						Turn off your Wi-Fi and press Generate another. A new key still appears.
+					</p>
+				</li>
+			</ul>
+			<details class="group mt-5 border-t border-stone-200 pt-4">
+				<summary
+					class="flex cursor-pointer list-none items-center gap-1.5 text-[13px] font-bold text-stone-700 hover:text-stone-900 [&::-webkit-details-marker]:hidden"
+				>
+					<ChevronDown class="h-4 w-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+					See the code that made it
+				</summary>
+				<pre
+					class="mt-3 rounded-2xl bg-stone-900 p-4 font-mono text-[12.5px] leading-relaxed break-words whitespace-pre-wrap text-stone-100 [tab-size:2]"><code>{keySource.trim()}</code></pre>
+				<p class="mt-3 text-[13px] font-medium text-stone-600">
+					That is all of it. The rest of the page only shows, copies and downloads the result: <a
+						href={sourceUrl}
+						class="font-bold text-stone-900 underline underline-offset-2">read its source</a
+					>.
+				</p>
+			</details>
+		</section>
+
+		<section aria-labelledby="next-heading" class="mt-12">
+			<h2 id="next-heading" class="text-[1.25rem] font-extrabold tracking-tight text-stone-900">
+				Save it, then deploy
+			</h2>
+			<ul class="mt-4 space-y-2 text-[15px] leading-relaxed font-medium text-stone-600">
+				<li class="flex gap-2.5">
+					<Check class="mt-1 h-4 w-4 shrink-0 text-stone-900" aria-hidden="true" />
+					<span>Put it in your password manager now. Nobody, us included, can recover it.</span>
+				</li>
+				<li class="flex gap-2.5">
+					<Check class="mt-1 h-4 w-4 shrink-0 text-stone-900" aria-hidden="true" />
+					<span
+						>Already have Cloudflare's deploy form open? Paste the key into its <code
+							class="font-mono text-stone-800">APP_ENCRYPTION_KEY</code
+						> field and carry on there.</span
+					>
+				</li>
+				<li class="flex gap-2.5">
+					<Check class="mt-1 h-4 w-4 shrink-0 text-stone-900" aria-hidden="true" />
+					<span>Starting here? The button below opens it.</span>
+				</li>
+			</ul>
+			<div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+				<DeployButton />
+				<a
+					href={LINKS.deploy}
+					class="text-[14px] font-bold text-stone-600 underline underline-offset-2 hover:text-stone-900"
+					>Read the deploy guide</a
+				>
+			</div>
+
+			<details class="group mt-10">
+				<summary
+					class="flex cursor-pointer list-none items-center gap-1.5 text-[14px] font-bold text-stone-700 hover:text-stone-900 [&::-webkit-details-marker]:hidden"
+				>
+					<ChevronDown class="h-4 w-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+					Why this key matters
+				</summary>
+				<ul class="mt-3 list-disc space-y-2 pl-5 text-[14px] leading-relaxed font-medium text-stone-600">
+					<li>
+						Your first visit to the new instance asks for it, to prove the instance is yours before it
+						creates your account.
+					</li>
+					<li>
+						It encrypts the account tokens CogSend stores. Replacing it means reconnecting every
+						account.
+					</li>
+					<li>Treat it like a password: anyone holding it and your database can read those tokens.</li>
+				</ul>
+			</details>
+
+			<p class="mt-6 text-[14px] leading-relaxed font-medium text-stone-500">
+				Prefer a terminal? <code class="font-mono text-stone-800">openssl rand -hex 32</code> makes the
+				same kind of key.
+			</p>
+		</section>
 	</main>
 	<Footer />
 </Layout>
 
 <script>
-	// 32 random bytes as 64 hex characters: what `openssl rand -hex 32` prints,
-	// and what the app reads as a raw 256-bit key.
-	function generate(): string {
-		const bytes = crypto.getRandomValues(new Uint8Array(32));
-		return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
-	}
+	import { generateKey } from '../scripts/generate-key';
 
 	const output = document.getElementById('key');
 	const status = document.getElementById('status');
+	const copyButton = document.getElementById('copy');
+	let key = '';
+	let resetCopy: number | undefined;
 
-	function show() {
-		if (output) output.textContent = generate();
-		if (status) status.textContent = '';
+	function say(text: string) {
+		if (status) status.textContent = text;
 	}
 
-	document.getElementById('regenerate')?.addEventListener('click', show);
-	document.getElementById('copy')?.addEventListener('click', async () => {
-		if (!output || !status) return;
+	function showCopied(copied: boolean) {
+		if (!copyButton) return;
+		copyButton.querySelector('[data-icon="copy"]')?.classList.toggle('hidden', copied);
+		copyButton.querySelector('[data-icon="copied"]')?.classList.toggle('hidden', !copied);
+		const label = copyButton.querySelector('[data-label]');
+		if (label) label.textContent = copied ? 'Copied' : 'Copy key';
+	}
+
+	function show() {
+		key = generateKey();
+		if (!output) return;
+		const groups = key.match(/.{8}/g) ?? [key];
+		output.replaceChildren(
+			...groups.map((group) => {
+				const span = document.createElement('span');
+				span.className = 'mr-3 inline-block';
+				span.textContent = group;
+				return span;
+			})
+		);
+		window.clearTimeout(resetCopy);
+		showCopied(false);
+	}
+
+	function selectKey() {
+		if (!output) return;
+		const range = document.createRange();
+		range.selectNodeContents(output);
+		const selection = window.getSelection();
+		selection?.removeAllRanges();
+		selection?.addRange(range);
+	}
+
+	// Belt and braces for a hand copy: whatever a browser puts between the groups,
+	// the clipboard gets the key alone.
+	output?.addEventListener('copy', (event) => {
+		const selected = window.getSelection()?.toString() ?? '';
+		if (!event.clipboardData) return;
+		event.clipboardData.setData('text/plain', selected.replace(/\s+/g, ''));
+		event.preventDefault();
+	});
+
+	document.getElementById('regenerate')?.addEventListener('click', () => {
+		show();
+		say('New key. Copy this one: the previous key is gone.');
+	});
+
+	copyButton?.addEventListener('click', async () => {
 		try {
-			await navigator.clipboard.writeText(output.textContent ?? '');
-			status.textContent = 'Copied';
+			await navigator.clipboard.writeText(key);
 		} catch {
-			status.textContent = 'Select the key and copy it by hand';
+			// Clipboard access can be refused outside a secure context; select the
+			// key so the copy is one keystroke away.
+			selectKey();
+			say('Your browser blocked copying. The key is selected: press Ctrl+C or ⌘C.');
+			return;
 		}
+		showCopied(true);
+		say('Copied. Paste it into the deploy form and your password manager.');
+		window.clearTimeout(resetCopy);
+		resetCopy = window.setTimeout(() => showCopied(false), 4000);
+	});
+
+	// The file is built in memory and handed to the browser's own download; no
+	// request leaves the page. It holds the key alone, so pasting the whole file
+	// into the deploy form still works.
+	document.getElementById('download')?.addEventListener('click', () => {
+		const url = URL.createObjectURL(new Blob([`${key}\n`], { type: 'text/plain' }));
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = 'cogsend-encryption-key.txt';
+		link.click();
+		window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+		say('Downloaded. Move the file into your password manager, then delete it.');
 	});
 
 	show();

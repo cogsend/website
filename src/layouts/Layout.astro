@@ -7,9 +7,16 @@ interface Props {
 	description?: string;
 	/** Drops the canonical link and asks crawlers to stay away. For the 404. */
 	noindex?: boolean;
+	/** Leaves both beacons out. For the key page, which promises it talks to no server. */
+	analytics?: boolean;
 }
 
-const { title = SITE.title, description = SITE.description, noindex = false } = Astro.props;
+const {
+	title = SITE.title,
+	description = SITE.description,
+	noindex = false,
+	analytics = true
+} = Astro.props;
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const ogImage = new URL(OG_IMAGE.path, SITE.url).href;
 ---
@@ -80,7 +87,7 @@ const ogImage = new URL(OG_IMAGE.path, SITE.url).href;
 		<slot />
 
 		{
-			CF_ANALYTICS_TOKEN && (
+			analytics && CF_ANALYTICS_TOKEN && (
 				<script
 					is:inline
 					defer
@@ -94,13 +101,17 @@ const ogImage = new URL(OG_IMAGE.path, SITE.url).href;
 		     localhost — dev, preview and the CI a11y run — is never counted. The
 		     CSP in public/_headers allows both this script and the beacon it
 		     posts back to the same host. -->
-		<script
-			is:inline
-			defer
-			src={UMAMI.script}
-			data-website-id={UMAMI.websiteId}
-			data-domains={UMAMI.domains}
-		/>
+		{
+			analytics && (
+				<script
+					is:inline
+					defer
+					src={UMAMI.script}
+					data-website-id={UMAMI.websiteId}
+					data-domains={UMAMI.domains}
+				/>
+			)
+		}
 
 		<script is:inline>
 			// One observer for every [data-reveal] on the page. Optical, not
