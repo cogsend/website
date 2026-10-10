@@ -43,8 +43,11 @@
 # as two policies and enforces both, so this one only takes away. No
 # connect-src, no third-party script, no form, no frame. The page also renders
 # without analytics (`analytics={false}` in src/pages/key.astro), or the
-# blocked beacons would fill the console with errors.
+# blocked beacons would fill the console with errors. `no-transform` keeps
+# Cloudflare from injecting its Web Analytics beacon into the HTML on the way
+# out, which this policy would block, with an error, just the same.
 /key/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
   Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'
 
 # Astro's build-hashed assets never change under the same name.
