@@ -102,7 +102,8 @@ sends no CSP, for exactly this reason.
 
 `/docs` is the app's manual, rendered here. The prose is not copied into this
 repo: `scripts/sync-docs.mjs` reads the app's `docs/` folder, rewrites its
-relative links into site ones, splices in the site-only additions, and writes
+relative links into site ones, swaps Cloudflare's Deploy badge (an image the CSP
+blocks) for the site's own button, splices in the site-only additions, and writes
 `src/content/docs/` — which is gitignored and rebuilt by `predev`, `precheck` and
 `prebuild`. Locally it reads the sibling checkout at `../cogsend/docs`; CI and
 Cloudflare have no sibling, so they fall back to `raw.githubusercontent.com` at

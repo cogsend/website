@@ -16,7 +16,9 @@
  *      drift into two different titles for one page.
  *   2. Rewrites the app's relative links (`deploy.md#backups`) into site ones
  *      (`/docs/deploy/#backups`), and links that escape the docs folder
- *      (`../CONTRIBUTING.md`) into GitHub ones.
+ *      (`../CONTRIBUTING.md`) into GitHub ones. Cloudflare's Deploy to
+ *      Cloudflare badge, an image the site's CSP blocks, becomes the site's own
+ *      button.
  *   3. Splices in `src/docs/extras/<slug>.md`, which is where site-only detail
  *      lives: screenshots, video, worked examples. An extras file can insert
  *      after any heading, or at the top of the page, and it is addressed by
@@ -225,6 +227,30 @@ function docsHref(path) {
 	return DOCS_ORDER.some((item) => item.slug === slug) ? `/docs/${slug}/` : null;
 }
 
+/**
+ * Cloudflare's badge is an image on their domain. GitHub shows it, so the app's
+ * docs keep it, but `img-src 'self'` in public/_headers blocks it here and the
+ * page would show its alt text in a broken box. The site draws its own button
+ * instead, styled in docs.css to match DeployButton.astro.
+ */
+const DEPLOY_BADGE =
+	/\[!\[([^\]]*)\]\(https:\/\/deploy\.workers\.cloudflare\.com\/button\)\]\((https:\/\/deploy\.workers\.cloudflare\.com\/\?url=[^)\s]+)\)/g;
+const CLOUD =
+	'<svg viewBox="0 0 24 24" width="18" height="18" fill="#F6821F" aria-hidden="true">' +
+	'<path d="M17.5 19H8a6 6 0 1 1 1.06-11.9A6.5 6.5 0 0 1 21 10.5a4.25 4.25 0 0 1-3.5 8.5Z"></path></svg>';
+
+function replaceDeployBadge(body) {
+	const lines = body.split('\n');
+	walkLines(body, (line, index) => {
+		lines[index] = line.replace(
+			DEPLOY_BADGE,
+			(all, alt, href) =>
+				`<a class="docs-deploy-button" href="${href}">${CLOUD}${alt || 'Deploy to Cloudflare'}</a>`
+		);
+	});
+	return lines.join('\n');
+}
+
 function rewriteLinks(body, item) {
 	return body.replace(/\]\(([^)\s]+)([^)]*)\)/g, (all, target, rest) => {
 		if (/^([a-z][a-z0-9+.-]*:|#|\/)/i.test(target)) return all;
@@ -284,6 +310,13 @@ function warnAboutLeftovers(body, item) {
 					`not resolve on the site. Write it as a normal markdown link.`
 			);
 		}
+		for (const [, src] of line.matchAll(/!\[[^\]]*\]\((https?:\/\/[^)\s]+)/g)) {
+			warnings.push(
+				`${item.slug}: the image "${src}" is on another site, which the CSP's img-src blocks, so ` +
+					`it will show as a broken image. Copy it to public/shots/ and reference it from ` +
+					`src/docs/extras/${item.slug}.md instead.`
+			);
+		}
 	});
 }
 
@@ -319,7 +352,7 @@ for (const item of DOCS_ORDER) {
 			`${item.source} has no H1, so the page is titled "${item.title}" from the nav alone.`
 		);
 	}
-	const body = rewriteLinks(applyExtras(app.body, extras, item), item);
+	const body = rewriteLinks(replaceDeployBadge(applyExtras(app.body, extras, item)), item);
 	warnAboutLeftovers(body, item);
 	pages.push({ item, body });
 }

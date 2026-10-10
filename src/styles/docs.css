@@ -70,6 +70,30 @@
 	text-decoration-color: #a8a29e;
 }
 
+/* The button scripts/sync-docs.mjs puts in place of Cloudflare's Deploy badge,
+   drawn like DeployButton.astro. */
+.docs-prose a.docs-deploy-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.625rem 1.25rem;
+	border-radius: 9999px;
+	background: #1c1917;
+	box-shadow: var(--shadow-ink);
+	color: #fff;
+	font-size: 14px;
+	line-height: 1.25;
+	text-decoration: none;
+	transition:
+		background-color 0.15s ease,
+		transform 0.15s ease;
+}
+.docs-prose a.docs-deploy-button:hover {
+	background: #292524;
+	color: #fff;
+	transform: translateY(-2px);
+}
+
 .docs-prose ul,
 .docs-prose ol {
 	margin: 1rem 0;
