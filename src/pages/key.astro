@@ -74,15 +74,17 @@ const sourceUrl = `${LINKS.siteRepo}/blob/main/src/pages/key.astro`;
 					Made in this browser, sent nowhere
 				</p>
 			</div>
-			<!-- Groups of eight are easier to compare by eye. They are inline-block
-			     spans with no text between them, so selecting the key by hand still
-			     copies one unbroken string; flex items would copy one per line. -->
-			<output
-				id="key"
-				aria-label="Encryption key"
-				class="mt-4 block font-mono text-[16px] leading-relaxed font-bold text-stone-900 select-all sm:text-[17px]"
-				>Generating…</output
-			>
+			<!-- Sized to the card, so all 64 characters sit on one line wherever
+			     that stays readable; on a phone it breaks onto a second line instead
+			     of shrinking past 12px. -->
+			<div class="mt-4 @container">
+				<output
+					id="key"
+					aria-label="Encryption key"
+					class="block font-mono text-[length:clamp(12px,calc(100cqw/40),15px)] leading-relaxed font-bold break-all text-stone-900 select-all"
+					>Generating…</output
+				>
+			</div>
 			<div class="mt-5 flex flex-wrap items-center gap-3">
 				<button
 					id="copy"
@@ -245,15 +247,7 @@ const sourceUrl = `${LINKS.siteRepo}/blob/main/src/pages/key.astro`;
 	function show() {
 		key = generateKey();
 		if (!output) return;
-		const groups = key.match(/.{8}/g) ?? [key];
-		output.replaceChildren(
-			...groups.map((group) => {
-				const span = document.createElement('span');
-				span.className = 'mr-3 inline-block';
-				span.textContent = group;
-				return span;
-			})
-		);
+		output.textContent = key;
 		window.clearTimeout(resetCopy);
 		showCopied(false);
 	}
@@ -266,15 +260,6 @@ const sourceUrl = `${LINKS.siteRepo}/blob/main/src/pages/key.astro`;
 		selection?.removeAllRanges();
 		selection?.addRange(range);
 	}
-
-	// Belt and braces for a hand copy: whatever a browser puts between the groups,
-	// the clipboard gets the key alone.
-	output?.addEventListener('copy', (event) => {
-		const selected = window.getSelection()?.toString() ?? '';
-		if (!event.clipboardData) return;
-		event.clipboardData.setData('text/plain', selected.replace(/\s+/g, ''));
-		event.preventDefault();
-	});
 
 	document.getElementById('regenerate')?.addEventListener('click', () => {
 		show();
