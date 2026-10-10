@@ -49,6 +49,20 @@ body {
 	textarea:focus-visible {
 		outline-style: none;
 	}
+	/* Inline code on every page, the docs included, reads as a small chip
+	   rather than a font change. Code blocks (`pre > code`) keep their own
+	   look. Layered, so a utility class on one element can still override it. */
+	:not(pre) > code {
+		padding: 0.1rem 0.35rem;
+		border: 1px solid #e7e5e4;
+		border-radius: 0.5rem;
+		background: #f5f5f4;
+		color: #0c0c0e;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+		font-size: 0.8125em;
+		font-weight: 600;
+		overflow-wrap: break-word;
+	}
 	@media (prefers-reduced-motion: reduce) {
 		*,
 		*::before,

@@ -55,7 +55,7 @@ const sourceUrl = `${LINKS.siteRepo}/blob/main/src/pages/key.astro`;
 			Your encryption key
 		</h1>
 		<p class="mt-4 text-[16px] leading-relaxed font-medium text-stone-500">
-			Paste it into the <code class="font-mono text-stone-800">APP_ENCRYPTION_KEY</code> field of the
+			Paste it into the <code>APP_ENCRYPTION_KEY</code> field of the
 			deploy form, and keep a copy: your first visit to CogSend asks for it again.
 		</p>
 
@@ -115,7 +115,7 @@ const sourceUrl = `${LINKS.siteRepo}/blob/main/src/pages/key.astro`;
 			<p id="status" class="mt-3 min-h-5 text-[13px] font-bold text-stone-500" role="status"></p>
 		</section>
 		<p class="mt-3 px-1 text-[14px] leading-relaxed font-medium text-stone-500">
-			Prefer a terminal? <code class="font-mono text-stone-800">openssl rand -hex 32</code> makes the
+			Prefer a terminal? <code>openssl rand -hex 32</code> makes the
 			same kind of key.
 		</p>
 
@@ -128,9 +128,8 @@ const sourceUrl = `${LINKS.siteRepo}/blob/main/src/pages/key.astro`;
 					<Laptop class="h-5 w-5 text-stone-700" aria-hidden="true" />
 					<p class="mt-2 text-[14px] font-bold text-stone-900">Made in your browser</p>
 					<p class="mt-1 text-[13px] leading-relaxed font-medium text-stone-600">
-						By its cryptographic random generator, the same kind of key as <code
-							class="font-mono text-stone-800">openssl rand -hex 32</code
-						> prints.
+						By the cryptographic random generator built into every modern browser (Web
+						Crypto).
 					</p>
 				</li>
 				<li>
@@ -179,9 +178,7 @@ const sourceUrl = `${LINKS.siteRepo}/blob/main/src/pages/key.astro`;
 				<li class="flex gap-2.5">
 					<Check class="mt-1 h-4 w-4 shrink-0 text-stone-900" aria-hidden="true" />
 					<span
-						>Already have Cloudflare's deploy form open? Paste the key into its <code
-							class="font-mono text-stone-800">APP_ENCRYPTION_KEY</code
-						> field and carry on there.</span
+						>Already have Cloudflare's deploy form open? Paste the key into its <code>APP_ENCRYPTION_KEY</code> field and carry on there.</span
 					>
 				</li>
 				<li class="flex gap-2.5">

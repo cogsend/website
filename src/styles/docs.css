@@ -94,17 +94,7 @@
 	margin: 0.375rem 0;
 }
 
-.docs-prose :not(pre) > code {
-	padding: 0.1rem 0.35rem;
-	border: 1px solid #e7e5e4;
-	border-radius: 0.5rem;
-	background: #f5f5f4;
-	color: #0c0c0e;
-	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-	font-size: 0.8125em;
-	font-weight: 600;
-	overflow-wrap: break-word;
-}
+/* Inline code is the site-wide chip in global.css. */
 
 /* Shiki sets its own colours inline. The docs blocks are meant to read as the
    same surface as the site's terminal blocks, so they get stone-900 and the
