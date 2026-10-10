@@ -45,6 +45,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DOCS_ORDER } from '../src/docs/nav.mjs';
+import { cloudflareLogo } from '../src/cloudflare-logo.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(root, 'src/content/docs');
@@ -231,22 +232,21 @@ function docsHref(path) {
  * Cloudflare's badge is an image on their domain. GitHub shows it, so the app's
  * docs keep it, but `img-src 'self'` in public/_headers blocks it here and the
  * page would show its alt text in a broken box. The site draws its own button
- * instead, styled in docs.css to match DeployButton.astro.
+ * instead, styled in docs.css to match DeployButton.astro, with the badge's
+ * own logo.
  */
 const DEPLOY_BADGE =
 	/\[!\[([^\]]*)\]\(https:\/\/deploy\.workers\.cloudflare\.com\/button\)\]\((https:\/\/deploy\.workers\.cloudflare\.com\/\?url=[^)\s]+)\)/g;
-const CLOUD =
-	'<svg viewBox="0 0 24 24" width="18" height="18" fill="#F6821F" aria-hidden="true">' +
-	'<path d="M17.5 19H8a6 6 0 1 1 1.06-11.9A6.5 6.5 0 0 1 21 10.5a4.25 4.25 0 0 1-3.5 8.5Z"></path></svg>';
 
 function replaceDeployBadge(body) {
 	const lines = body.split('\n');
+	let count = 0;
 	walkLines(body, (line, index) => {
-		lines[index] = line.replace(
-			DEPLOY_BADGE,
-			(all, alt, href) =>
-				`<a class="docs-deploy-button" href="${href}">${CLOUD}${alt || 'Deploy to Cloudflare'}</a>`
-		);
+		lines[index] = line.replace(DEPLOY_BADGE, (all, alt, href) => {
+			count += 1;
+			const logo = cloudflareLogo(`cf-docs-${count}`, 22);
+			return `<a class="docs-deploy-button" href="${href}">${logo}${alt || 'Deploy to Cloudflare'}</a>`;
+		});
 	});
 	return lines.join('\n');
 }
