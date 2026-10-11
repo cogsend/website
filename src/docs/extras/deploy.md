@@ -1,5 +1,5 @@
 <!-- docs:after "One command" -->
-You also need **Node 22.12 or newer** — the version the app declares, which `npm`
+You also need **Node 22.17+, 24 or 26+** — the versions the app declares, which `npm`
 enforces before it runs anything — and about **five minutes**, most of it
 `wrangler login` and the first deploy. To read the plan before anything changes,
 run `npm run setup -- --dry-run` from the checkout first.
