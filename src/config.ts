@@ -48,15 +48,15 @@ export const LINKS = {
 
 /**
  * The narrated product demo, served from the project's own asset bucket rather
- * than bundled into the build. It is 67 MB and two minutes long, so the hero
+ * than bundled into the build. It is 7 MB and a minute and a half long, so the hero
  * links to it and the dialog fetches it on click — never on page load. The
  * dimensions are here so the player can reserve its box, which stops the
  * dialog resizing when the metadata arrives.
  */
 export const DEMO_VIDEO = {
-	url: 'https://assets.deepakness.com/cogsend/cogsend-demo-2k.mp4',
-	width: 1712,
-	height: 1080
+	url: 'https://assets.deepakness.com/cogsend/cogsend-intro.mp4',
+	width: 1600,
+	height: 900
 } as const;
 
 /**

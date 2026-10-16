@@ -88,7 +88,7 @@ import { LoaderCircle, Play, Star, X } from '@lucide/astro';
 
 	<!--
 		The demo player. The <video> ships with no `src`, so a page load makes no
-		request for the 67 MB file at all: the script below fills it in when
+		request for the video at all: the script below fills it in when
 		somebody opens the dialog and takes it away again when they close it. The
 		box is reserved from the config's dimensions, so the dialog does not jump
 		when the metadata arrives.
@@ -112,7 +112,7 @@ import { LoaderCircle, Play, Star, X } from '@lucide/astro';
 				<X class="h-4 w-4" />
 			</button>
 			<!-- Shown from the click until the first frame can play: without it the
-			     dialog opens on a black box while a large file starts. -->
+			     dialog opens on a black box while the file starts. -->
 			<div
 				data-demo-loading
 				role="status"
@@ -142,7 +142,7 @@ import { LoaderCircle, Play, Star, X } from '@lucide/astro';
 <style>
 	/* The dialog lives in the browser's top layer, so this is the whole of its
 	   chrome. There is deliberately no backdrop blur: it keeps the compositor
-	   busy for as long as the 1080p video plays, and a flat wash reads the same
+	   busy for as long as the video plays, and a flat wash reads the same
 	   on a phone. */
 	[data-demo-dialog]::backdrop {
 		background: rgb(12 12 14 / 0.8);
@@ -155,11 +155,11 @@ import { LoaderCircle, Play, Star, X } from '@lucide/astro';
 
 <script>
 	/**
-	 * The demo is 67 MB, so the one rule here is that nothing is fetched until
+	 * The demo is several megabytes, so the one rule here is that nothing is fetched until
 	 * it is asked for. The <video> carries no `src` in the markup and opening
 	 * the dialog is what sets one. Closing takes it away again, which aborts a
 	 * download somebody has changed their mind about and releases the decoded
-	 * frames instead of leaving a 1080p stream parked in memory on a phone.
+	 * frames instead of leaving a video stream parked in memory on a phone.
 	 */
 	const dialog = document.querySelector<HTMLDialogElement>('[data-demo-dialog]');
 	const video = dialog?.querySelector<HTMLVideoElement>('[data-demo-video]');
