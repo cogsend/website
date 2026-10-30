@@ -87,7 +87,7 @@ const html = /* html */ `
 
 			<h1>Your self-hosted social scheduler,<br /><span>on your own Cloudflare account.</span></h1>
 
-			<p class="platforms">Mastodon, Bluesky, LinkedIn, Threads and X.</p>
+			<p class="platforms">Mastodon, Bluesky, LinkedIn, Threads, Instagram and X.</p>
 		</main>
 
 		<footer>

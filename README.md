@@ -1,7 +1,7 @@
 # cogsend.com
 
 The marketing site for [CogSend](https://github.com/cogsend/cogsend) — a
-self-hosted social scheduler for Mastodon, Bluesky, LinkedIn, Threads and X.
+self-hosted social scheduler for Mastodon, Bluesky, LinkedIn, Threads, Instagram and X.
 
 There are two halves: the homepage, and `/docs`. The docs are written in the app
 repo's `docs/` folder and rendered here by `scripts/sync-docs.mjs`, so the app

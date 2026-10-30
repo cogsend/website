@@ -10,7 +10,7 @@ export const SITE = {
 	title: 'Self-hosted social media scheduler — CogSend',
 	/** Held under ~155 characters, which is about where Google truncates. */
 	description:
-		'Self-hosted social scheduler for Mastodon, Bluesky, LinkedIn, Threads and X. Write once, customize per platform, schedule on your own Cloudflare account.'
+		'Self-hosted social scheduler for Mastodon, Bluesky, LinkedIn, Threads, Instagram and X. Write once, customize per platform, schedule on your own Cloudflare account.'
 } as const;
 
 export const LINKS = {

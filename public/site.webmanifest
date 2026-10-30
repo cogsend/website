@@ -1,7 +1,7 @@
 {
 	"name": "CogSend",
 	"short_name": "CogSend",
-	"description": "Self-hosted social scheduler for Mastodon, Bluesky, LinkedIn, Threads and X.",
+	"description": "Self-hosted social scheduler for Mastodon, Bluesky, LinkedIn, Threads, Instagram and X.",
 	"start_url": "/",
 	"scope": "/",
 	"display": "minimal-ui",
