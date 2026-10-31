@@ -104,7 +104,13 @@ export const DOCS_NAV = [
 				slug: 'api',
 				title: 'API keys',
 				description:
-					'Use a personal key from scripts, Shortcuts, cron jobs and AI agents over MCP. The full endpoint reference lives in your own instance, at /api.'
+					'Use a personal key from scripts, Shortcuts and cron jobs: every endpoint, with worked examples.'
+			},
+			{
+				slug: 'mcp',
+				title: 'MCP server',
+				description:
+					'Connect Claude Code, Codex or any MCP client to draft, schedule and publish with your API key.'
 			}
 		]
 	},

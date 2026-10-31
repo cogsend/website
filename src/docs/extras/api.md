@@ -1,11 +1,3 @@
-<!-- docs:page -->
-> **The full reference lives in your instance.** Every endpoint, its payload and
-> what it answers is listed inside your own deployment at `/api`, next to the
-> examples and the copy buttons. This page is what has to be read first: making a
-> key, and making the first call.
-
-<!-- docs:end -->
-
 <!-- docs:after "Examples" -->
 Every call below needs a connection id, and the draft call hands back a draft id.
 `GET /api/connections` lists the connected accounts; `id` is the value the
@@ -42,6 +34,7 @@ curl -s "$APP_URL/api/queue" -H "Authorization: Bearer $COGSEND_API_KEY"
 
 ## Where to go next
 
+- [MCP server](/docs/mcp/) — connect an AI agent with the same key.
 - [Scheduling](/docs/scheduling/) — the tick that publishes a scheduled post, and the bearer it needs.
 - [Cloudflare Access](/docs/access/) — if the instance is behind Access, a script needs a service token as well as a key.
 - [Configuration](/docs/configuration/) — where keys and secrets are stored, and what `API_TOKEN` still does.

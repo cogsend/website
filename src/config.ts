@@ -38,6 +38,7 @@ export const LINKS = {
 	zernioDocs: '/docs/zernio/',
 	scheduling: '/docs/scheduling/',
 	api: '/docs/api/',
+	mcp: '/docs/mcp/',
 	author: 'https://deepakness.com',
 	// Cloudflare's own free-plan numbers, linked rather than restated so this
 	// site never becomes the stale copy of a page Cloudflare maintains.
