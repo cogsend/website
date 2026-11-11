@@ -24,12 +24,20 @@ const faqLd = {
 			'R2 keeps the first 10 GB free and traffic out is always free. The free plan allows five cron triggers per account, shared with every other Worker; if they are taken, drive the scheduler from your own timer. D1 pauses for the day past 100,000 rows written, resumes at midnight UTC, and nothing is lost.'
 		],
 		[
+			'Which platforms does it post to, and what can each do?',
+			'Mastodon, Bluesky, LinkedIn, Threads, Instagram and X. A post can carry text, up to four images with alt text, or one video. Mastodon, Bluesky, Threads and X post a thread as a thread; LinkedIn and Instagram get it joined into one post. Instagram needs a photo or video, and sends one photo as a photo post, two to ten as a carousel, and a video as a Reel. X allows 280 characters, or 25,000 on a paid plan, and the counter follows the strictest account you picked.'
+		],
+		[
 			'Do I need a developer app for every platform?',
 			'No. Mastodon and Bluesky connect with what you already have. LinkedIn, Threads, Instagram and X need an app you register with them first: the app walks you through it, takes the credentials in a form, and can hand the setup to a browser agent. X also charges for posting: its API is pay-per-use, so fund a small balance before you connect it. If you would rather not register apps, you can connect them through Zernio instead. It has a free plan, though X needs a card there.'
 		],
 		[
 			'Can AI agents like Claude Code use CogSend?',
 			'Yes. Your instance includes an MCP server, so Claude Code, Codex or any MCP client can draft, schedule and publish with your personal API key. A read-only key lets an agent look without posting.'
+		],
+		[
+			'Can more than one person use it?',
+			'Not as separate users. An instance has one admin account, with one email, password and authenticator, and no roles. To get feedback on a draft without sharing the login, send a preview link, which shows the draft read-only. Scripts and AI agents use an API key instead of the login. Anyone who wants their own account can deploy their own instance, which costs nothing on the free plan.'
 		],
 		[
 			'How do I update it later?',
@@ -105,6 +113,23 @@ const faqLd = {
 
 		<li class="border-t border-stone-200/80 py-7">
 			<h3 class="mb-3 text-[17px] font-extrabold tracking-tight text-stone-900">
+				Which platforms does it post to, and what can each do?
+			</h3>
+			<p class={ANSWER_CLASS}>
+				Mastodon, Bluesky, LinkedIn, Threads, Instagram and X. A post can carry text, up to four
+				images with alt text, or one video. Mastodon, Bluesky, Threads and X post a thread as a
+				thread; LinkedIn and Instagram get it joined into one post.
+			</p>
+			<p class={`mt-3 ${ANSWER_CLASS}`}>
+				Instagram needs a photo or video, and sends one photo as a photo post, two to ten as a
+				carousel, and a video as a Reel. X allows 280 characters, or 25,000 on a paid plan, and the
+				counter follows the strictest account you picked. See{' '}
+				<a href={`${LINKS.oauth}#platforms`} class={LINK_CLASS}>every platform's limits</a>.
+			</p>
+		</li>
+
+		<li class="border-t border-stone-200/80 py-7">
+			<h3 class="mb-3 text-[17px] font-extrabold tracking-tight text-stone-900">
 				Do I need a developer app for every platform?
 			</h3>
 			<p class={ANSWER_CLASS}>
@@ -137,6 +162,22 @@ const faqLd = {
 				schedule and publish with your personal API key. A read-only key lets an agent look without
 				posting. See{' '}
 				<a href={LINKS.mcp} class={LINK_CLASS}>MCP server</a>.
+			</p>
+		</li>
+
+		<li class="border-t border-stone-200/80 py-7">
+			<h3 class="mb-3 text-[17px] font-extrabold tracking-tight text-stone-900">
+				Can more than one person use it?
+			</h3>
+			<p class={ANSWER_CLASS}>
+				Not as separate users. An instance has one admin account, with one email, password and
+				authenticator, and no roles. To get feedback on a draft without sharing the login, send a{' '}
+				<a href={`${LINKS.posts}#preview-links`} class={LINK_CLASS}>preview link</a>, which shows
+				the draft read-only. Scripts and AI agents use an API key instead of the login.
+			</p>
+			<p class={`mt-3 ${ANSWER_CLASS}`}>
+				Anyone who wants their own account can deploy their own instance, which costs nothing on the
+				free plan.
 			</p>
 		</li>
 

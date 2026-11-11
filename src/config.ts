@@ -34,6 +34,7 @@ export const LINKS = {
 	key: '/key/',
 	configuration: '/docs/configuration/',
 	composer: '/docs/composer/',
+	posts: '/docs/posts/',
 	oauth: '/docs/oauth-apps/',
 	zernioDocs: '/docs/zernio/',
 	scheduling: '/docs/scheduling/',
