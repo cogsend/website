@@ -70,3 +70,11 @@
 
 /sitemap-index.xml
   Cache-Control: public, max-age=3600
+
+# Screenshots and the social image keep their names when they are retaken, so
+# a day rather than immutable: a new shot reaches everyone by the next day.
+/shots/*
+  Cache-Control: public, max-age=86400
+
+/og.png
+  Cache-Control: public, max-age=86400

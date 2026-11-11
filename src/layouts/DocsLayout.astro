@@ -217,59 +217,59 @@ const FOOT_LINK =
 		</div>
 	</main>
 	<Footer />
+
+	<script>
+		/**
+		 * Two additions to the rendered prose, made here because the markdown is
+		 * generated from the app repo and cannot carry them itself. Without
+		 * JavaScript the page is the same page, minus both.
+		 *
+		 * 1. A `#` link after every h2 and h3, so a section can be shared. The ids
+		 *    already exist — the app's own code links to them — this only makes them
+		 *    reachable without reading the source.
+		 * 2. A copy button on every code block. These pages are mostly commands.
+		 */
+		const prose = document.querySelector<HTMLElement>('.docs-prose');
+
+		if (prose) {
+			for (const heading of prose.querySelectorAll<HTMLHeadingElement>('h2[id], h3[id]')) {
+				const link = document.createElement('a');
+				link.href = `#${heading.id}`;
+				link.className = 'docs-anchor';
+				link.textContent = '#';
+				link.setAttribute('aria-label', `Link to this section: ${heading.textContent?.trim() ?? ''}`);
+				heading.append(link);
+			}
+
+			for (const block of prose.querySelectorAll<HTMLPreElement>('pre')) {
+				const wrap = document.createElement('div');
+				wrap.className = 'docs-code';
+				block.replaceWith(wrap);
+				wrap.append(block);
+
+				const button = document.createElement('button');
+				button.type = 'button';
+				button.className = 'docs-copy';
+				button.textContent = 'Copy';
+				button.addEventListener('click', async () => {
+					const text = (block.querySelector('code') ?? block).textContent ?? '';
+					try {
+						await navigator.clipboard.writeText(text.replace(/\n+$/, ''));
+						button.textContent = 'Copied';
+					} catch {
+						// No clipboard (plain http, an old browser): select the block
+						// instead, so the copy is one keystroke away.
+						const range = document.createRange();
+						range.selectNodeContents(block);
+						const selection = window.getSelection();
+						selection?.removeAllRanges();
+						selection?.addRange(range);
+						button.textContent = 'Selected';
+					}
+					window.setTimeout(() => (button.textContent = 'Copy'), 2000);
+				});
+				wrap.append(button);
+			}
+		}
+	</script>
 </Layout>
-
-<script>
-	/**
-	 * Two additions to the rendered prose, made here because the markdown is
-	 * generated from the app repo and cannot carry them itself. Without
-	 * JavaScript the page is the same page, minus both.
-	 *
-	 * 1. A `#` link after every h2 and h3, so a section can be shared. The ids
-	 *    already exist — the app's own code links to them — this only makes them
-	 *    reachable without reading the source.
-	 * 2. A copy button on every code block. These pages are mostly commands.
-	 */
-	const prose = document.querySelector<HTMLElement>('.docs-prose');
-
-	if (prose) {
-		for (const heading of prose.querySelectorAll<HTMLHeadingElement>('h2[id], h3[id]')) {
-			const link = document.createElement('a');
-			link.href = `#${heading.id}`;
-			link.className = 'docs-anchor';
-			link.textContent = '#';
-			link.setAttribute('aria-label', `Link to this section: ${heading.textContent?.trim() ?? ''}`);
-			heading.append(link);
-		}
-
-		for (const block of prose.querySelectorAll<HTMLPreElement>('pre')) {
-			const wrap = document.createElement('div');
-			wrap.className = 'docs-code';
-			block.replaceWith(wrap);
-			wrap.append(block);
-
-			const button = document.createElement('button');
-			button.type = 'button';
-			button.className = 'docs-copy';
-			button.textContent = 'Copy';
-			button.addEventListener('click', async () => {
-				const text = (block.querySelector('code') ?? block).textContent ?? '';
-				try {
-					await navigator.clipboard.writeText(text.replace(/\n+$/, ''));
-					button.textContent = 'Copied';
-				} catch {
-					// No clipboard (plain http, an old browser): select the block
-					// instead, so the copy is one keystroke away.
-					const range = document.createRange();
-					range.selectNodeContents(block);
-					const selection = window.getSelection();
-					selection?.removeAllRanges();
-					selection?.addRange(range);
-					button.textContent = 'Selected';
-				}
-				window.setTimeout(() => (button.textContent = 'Copy'), 2000);
-			});
-			wrap.append(button);
-		}
-	}
-</script>
