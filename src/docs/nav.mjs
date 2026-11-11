@@ -58,7 +58,7 @@ export const DOCS_NAV = [
 				slug: 'accounts',
 				title: 'Connecting accounts',
 				description:
-					'Connecting Mastodon, Bluesky, LinkedIn, Threads and X, reconnecting when a token expires, and what disconnecting keeps.'
+					'Connecting Mastodon, Bluesky, LinkedIn, Threads, Instagram and X, reconnecting when a token expires, and what disconnecting keeps.'
 			}
 		]
 	},
@@ -69,13 +69,13 @@ export const DOCS_NAV = [
 				slug: 'oauth-apps',
 				title: 'OAuth apps',
 				description:
-					'Register the developer apps LinkedIn, Threads and X require, then check each platform’s limits on text, images and threads.'
+					'Register the developer apps LinkedIn, Threads, Instagram and X require, then check each platform’s limits on text, images and threads.'
 			},
 			{
 				slug: 'zernio',
 				title: 'Connect through Zernio',
 				description:
-					'Connect X, Threads, LinkedIn and Bluesky through Zernio’s approved apps instead of registering your own, and what differs.'
+					'Connect X, Threads, Instagram, LinkedIn and Bluesky through Zernio’s approved apps instead of registering your own, and what differs.'
 			},
 			{
 				slug: 'access',
@@ -104,13 +104,13 @@ export const DOCS_NAV = [
 				slug: 'api',
 				title: 'API keys',
 				description:
-					'Use a personal key from scripts, Shortcuts and cron jobs: every endpoint, with worked examples.'
+					'Use a personal key from Settings → API & MCP in scripts, Shortcuts and cron jobs: every endpoint, paging and search, errors, limits and worked examples.'
 			},
 			{
 				slug: 'mcp',
 				title: 'MCP server',
 				description:
-					'Connect Claude Code, Codex or any MCP client to draft, schedule and publish with your API key.'
+					'Connect Claude Code, Codex or any MCP client to draft, schedule and publish with your API key: the setup for each client, the tools it offers, and what to check before an agent publishes.'
 			}
 		]
 	},
@@ -121,7 +121,7 @@ export const DOCS_NAV = [
 				slug: 'backups',
 				title: 'Backups',
 				description:
-					'What D1 keeps for you, how to export your own copy, and how to copy the media bucket.'
+					'What D1 keeps for you with Time Travel, how to rewind it, how to export your own copy of the database, and how to copy the media bucket.'
 			},
 			{
 				slug: 'troubleshooting',
@@ -138,7 +138,7 @@ export const DOCS_NAV = [
 				slug: 'development',
 				title: 'Local development',
 				description:
-					'Run the app on your machine, and the checks a change has to pass before it is done.'
+					'Run the app on your machine with a seeded account and local data, the tests and checks a change has to pass, and what the code expects.'
 			}
 		]
 	}
