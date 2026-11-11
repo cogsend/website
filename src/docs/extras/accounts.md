@@ -2,9 +2,9 @@
 <figure>
 	<picture>
 		<source srcset="/shots/accounts.webp" type="image/webp" />
-		<img src="/shots/accounts.png" alt="The Connected Accounts page: X, Threads, LinkedIn, Mastodon and Bluesky, each with a green Connected badge, and a Connect new button above the list." width="1760" height="1013" loading="lazy" />
+		<img src="/shots/accounts.png" alt="The Accounts page: X, Threads, Instagram, LinkedIn, Mastodon and Bluesky, each with a Disconnect button and no badge, since all six are working. X shows its Long posts switch and Bluesky its Compact links switch, under a Connect account button." width="1760" height="1700" loading="lazy" />
 	</picture>
-	<figcaption>Connected Accounts is where a finished OAuth app shows up. Mastodon and Bluesky connect without one.</figcaption>
+	<figcaption>Accounts is where a finished OAuth app shows up. A working account has no badge; one that needs reconnecting is marked. Mastodon and Bluesky connect without an app.</figcaption>
 </figure>
 <!-- docs:end -->
 
